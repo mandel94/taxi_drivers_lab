@@ -1,0 +1,176 @@
+version: 2
+
+# Le descrizioni vengono scritte come commenti Postgres (persist_docs): sono quelle che Metabase
+# e tbls mostrano a chi legge il dashboard.
+
+models:
+  - name: dim_date
+    description: "Calendario: una riga per giorno, con lunedi della settimana ISO, mese e trimestre."
+    columns:
+      - name: date_day
+        data_tests: [unique, not_null]
+      - name: week_start_date
+        description: "Lunedi della settimana ISO."
+
+  - name: dim_article
+    description: "Un articolo pubblicato per riga. Non espone testo, estratto o autore."
+    columns:
+      - name: article_id
+        data_tests: [unique, not_null]
+      - name: url_path
+        description: "Percorso del permalink senza dominio, minuscolo. Solo informativo: l'aggancio con GA4 usa il prefisso numerico del permalink."
+        data_tests:
+          - unique:
+              config:
+                severity: warn
+      - name: published_date
+        description: "Data di pubblicazione in fuso di Roma."
+      - name: primary_section_key
+        description: "Sezione primaria: quella con priority piu' bassa tra le sezioni dell'articolo. 'non_classificato' se nessuna categoria e' mappata."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_section')
+                field: section_key
+      - name: word_count
+        description: "Stima delle parole del testo, tolti i tag HTML."
+
+  - name: mart_article_daily
+    description: "Articolo per giorno, SPARSO: solo le coppie con traffico. L'assenza di riga vale zero."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [article_id, date_day]
+    columns:
+      - name: age_bucket
+        description: "Fascia di eta' dell'articolo alla data della metrica: 0-7, 8-30, 31-90, 91-365, 366+."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['0-7', '8-30', '31-90', '91-365', '366+']
+      - name: is_new_30d
+        description: "Vero se l'articolo ha meno di 30 giorni alla data della metrica."
+      - name: views
+        description: "Visualizzazioni di pagina. Si sommano ovunque."
+      - name: engagement_seconds
+        description: "Secondi di coinvolgimento. Si sommano ovunque."
+      - name: sessions_attributed
+        description: "Sessioni attribuite all'articolo: ogni sessione conta per ogni articolo visitato. NON sommare tra articoli."
+      - name: engaged_sessions_attributed
+        description: "Sessioni coinvolte attribuite all'articolo. NON sommare tra articoli."
+      - name: is_provisional
+        description: "Vero per gli ultimi giorni, che GA4 puo' ancora rivedere."
+
+  - name: mart_article_weekly
+    description: "Articolo per settimana (lunedi), SPARSO. Non include commenti ne' modifiche: fact_wp_engagement_weekly e' vuota."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [article_id, week_start_date]
+    columns:
+      - name: is_complete_week
+        description: "Falso per la prima settimana (dati che partono a meta') e per quella in corso."
+
+  - name: mart_section_weekly
+    description: "Sezione primaria per settimana, DENSO. views_share e' la quota sulle visualizzazioni attribuite agli articoli. I confronti _prev (settimana prima) e _py (52 settimane prima) sono null dove non c'e' storico."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [section_key, week_start_date]
+    columns:
+      - name: views_share
+        description: "Quota della sezione sul totale delle visualizzazioni attribuite agli articoli nella settimana (0-1)."
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+      - name: views_per_active_article
+        description: "Visualizzazioni diviso articoli con almeno una visualizzazione. Null se nessun articolo attivo."
+
+  - name: mart_content_weekly
+    description: "Intero sito (solo articoli) per settimana, DENSO: articoli nuovi (meno di 30 giorni) contro archivio."
+    columns:
+      - name: week_start_date
+        data_tests: [unique, not_null]
+      - name: share_new
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+      - name: top10_share
+        description: "Visualizzazioni dei 10 articoli piu' letti sul totale della settimana (0-1)."
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+
+  - name: mart_data_health
+    description: "Salute dei dati, una riga per fonte. E' una vista: lo stato si valuta al momento della lettura."
+    columns:
+      - name: source
+        data_tests: [unique, not_null]
+      - name: status
+        description: "ok, warn oppure error."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['ok', 'warn', 'error']
+      - name: matching_coverage
+        description: "Solo per ga4_articles: quota delle visualizzazioni di sito spiegata dagli articoli, ultimi 30 giorni chiusi (0-1)."
+
+  - name: mart_site_daily
+    description: "Totali di sito per giorno, DENSO. Rapporti ricalcolati dai componenti. Medie mobili a 7 giorni (_ma7), confronti con 7 giorni prima (_p7) e con lo stesso giorno della settimana un anno prima (_py)."
+    columns:
+      - name: date_day
+        data_tests: [unique, not_null]
+      - name: active_users
+        description: "Utenti attivi del giorno. NON si somma tra giorni; per utenti unici su settimana o mese usare mart_site_period."
+      - name: engagement_rate
+        description: "Sessioni coinvolte diviso sessioni (0-1). Null se non ci sono sessioni."
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+      - name: engagement_rate_ma7
+        description: "Rapporto delle somme su 7 giorni, non media dei rapporti giornalieri."
+      - name: matching_coverage
+        description: "Quota delle visualizzazioni di sito spiegata dagli articoli. Null prima dell'inizio dei dati per articolo."
+
+  - name: mart_site_period
+    description: "Totali di sito per settimana o mese. Gli utenti sono unici sul periodo (letti da GA4). _prev e _py sono esatti perche' l'unita' e' il periodo."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [period_type, period_start]
+    columns:
+      - name: period_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['week', 'month']
+      - name: is_complete
+        description: "Falso per il periodo in corso."
+
+  - name: mart_channel_daily
+    description: "Gruppo di canali per giorno, DENSO. Solo le sessioni sommano tra canali: active_users per canale NON si somma e non ha quote."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [channel_group, date_day]
+    columns:
+      - name: sessions_share
+        description: "Quota di sessioni del canale sul totale del giorno (0-1). Le quote di un giorno sommano a 1."
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+      - name: active_users
+        description: "Utenti attivi del canale. NON si somma tra canali (la stessa persona puo' comparire in piu' gruppi)."
+      - name: is_organic
+        description: "Vero per Organic Search, Organic Social, Organic Video, Organic Shopping."

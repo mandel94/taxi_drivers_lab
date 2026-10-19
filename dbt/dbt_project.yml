@@ -1,0 +1,58 @@
+name: taxidrivers
+version: "1.0.0"
+config-version: 2
+profile: taxidrivers
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+clean-targets: ["target", "dbt_packages"]
+
+# Finestre di copertura dei dati GA4, esplicite perche' min(data) non e' affidabile:
+# nel DB ci sono giorni isolati caricati per prova. Il backfill dinamico dell'ETL usa
+# gli stessi due valori (variabili GA4_ARTICLES_START / GA4_SITE_START del Makefile).
+vars:
+  ga4_articles_start: "2026-08-16"   # primo giorno con copertura continua per articolo
+  ga4_site_start: "2025-08-01"       # primo giorno con copertura di sito e canali
+  provisional_days: 2                # ultimi giorni che GA4 puo' ancora rivedere
+
+models:
+  taxidrivers:
+    +persist_docs:
+      relation: true
+      columns: true
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+
+seeds:
+  taxidrivers:
+    +persist_docs:
+      relation: true
+      columns: true
+    dim_section:
+      +schema: marts
+      +column_types:
+        section_key: text
+        section_name: text
+        priority: integer
+    section_category_map:
+      +schema: intermediate
+      +column_types:
+        section_key: text
+        category_id: integer
+        include_children: boolean
+    dim_channel:
+      +schema: marts
+      +column_types:
+        channel_group: text
+        display_name: text
+        sort_order: integer
+        is_organic: boolean

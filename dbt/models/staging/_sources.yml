@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Tabelle di ingestione create da Alembic nello schema public. dbt le legge, non le modifica."
+    schema: public
+    tables:
+      - name: articles_dim
+      - name: categories_dim
+      - name: articles_categories
+      - name: fact_ga4_daily
+        description: "GA4 per articolo, formato long: una riga per (articolo, giorno, metrica)."
+      - name: fact_ga4_site_daily
+      - name: fact_ga4_channel_daily
+      - name: fact_ga4_site_period
+      - name: etl_run_log

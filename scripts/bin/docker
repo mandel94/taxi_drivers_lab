@@ -1,0 +1,5 @@
+#!/bin/sh
+# Shim usato SOLO da scripts/run_refresh.sh (esecuzione senza terminale, es. Utilita' di
+# pianificazione). Il wrapper /usr/bin/docker di MSYS2 passa da winpty, che pretende un
+# terminale e fallisce con "stdin is not a tty". Qui si chiama docker.exe direttamente.
+exec "/c/Program Files/Docker/Docker/resources/bin/docker.exe" "$@"

@@ -1,0 +1,15 @@
+# Le credenziali arrivano dalle variabili d'ambiente (le stesse del .env e del docker-compose):
+# nessuna password in questo file. 'make dbt-build' le esporta gia'; a mano, caricale prima
+# (set -a; . ./.env; set +a) e lancia dbt dalla cartella dbt/ con --profiles-dir .
+taxidrivers:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5434') | as_number }}"
+      user: "{{ env_var('POSTGRES_USER') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD') }}"
+      dbname: "{{ env_var('POSTGRES_DB') }}"
+      schema: public
+      threads: 4

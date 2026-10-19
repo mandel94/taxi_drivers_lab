@@ -1,0 +1,15 @@
+section_key,section_name,priority
+interviste,Interviste,1
+live_streaming_on_demand,Live Streaming On Demand,2
+trailers,Trailers,3
+festival_di_cinema,Festival di Cinema,4
+serie_tv,Serie TV,5
+animazione,Animazione,6
+cult_movies,Cult Movies,7
+in_sala,In Sala,8
+recensioni,Recensioni,9
+guide_e_film_da_vedere,Guide e Film da Vedere,10
+speciali_e_magazine,Speciali e Magazine,11
+rubriche,Rubriche,12
+news,News,13
+non_classificato,Non classificato,99

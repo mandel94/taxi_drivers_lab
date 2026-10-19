@@ -1,0 +1,14 @@
+
+
+
+NLP
+
+
+Preprocessing NLP
+
+spaCy
+
+
+it_core_news_lg
+
+lemmatizzazione

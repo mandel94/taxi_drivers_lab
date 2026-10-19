@@ -1,0 +1,22 @@
+channel_group,display_name,sort_order,is_organic
+Organic Search,Ricerca organica,1,true
+Direct,Diretto,2,false
+Organic Social,Social organico,3,true
+Referral,Referral,4,false
+Email,Email,5,false
+Paid Search,Ricerca a pagamento,6,false
+Paid Social,Social a pagamento,7,false
+Organic Video,Video organico,8,true
+Organic Shopping,Shopping organico,9,true
+AI Assistant,Assistenti AI,10,false
+Display,Display,11,false
+Affiliates,Affiliazioni,12,false
+Audio,Audio,13,false
+SMS,SMS,14,false
+Mobile Push Notifications,Notifiche push,15,false
+Paid Video,Video a pagamento,16,false
+Paid Shopping,Shopping a pagamento,17,false
+Paid Other,Altro a pagamento,18,false
+Cross-network,Cross-network,19,false
+Unassigned,Non assegnato,20,false
+(not set),Non impostato,21,false

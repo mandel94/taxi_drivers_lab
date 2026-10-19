@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: stg_articles
+    description: "Articoli pubblicati, con la data di pubblicazione in fuso di Roma."
+    columns:
+      - name: article_id
+        data_tests: [unique, not_null]
+
+  - name: stg_categories
+    description: "Categorie WordPress."
+    columns:
+      - name: category_id
+        data_tests: [unique, not_null]
+
+  - name: stg_article_categories
+    description: "Ponte articolo-categoria."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [article_id, category_id]
+
+  - name: stg_ga4_article_daily
+    description: "GA4 per articolo, una riga per articolo e giorno con traffico (sparso)."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [article_id, date_day]
+    columns:
+      - name: article_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_articles')
+                field: article_id
+              config:
+                severity: warn   # un articolo GA4 non ancora sincronizzato da WordPress
+
+  - name: stg_ga4_site_daily
+    description: "Totali di sito GA4, una riga per giorno."
+    columns:
+      - name: date_day
+        data_tests: [unique, not_null]
+
+  - name: stg_ga4_channel_daily
+    description: "Totali GA4 per gruppo di canali, una riga per giorno e canale."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [date_day, channel_group]
+    columns:
+      - name: channel_group
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_channel')
+                field: channel_group
+              config:
+                severity: warn   # GA4 puo' aggiungere gruppi di canali: va aggiornato il seed dim_channel
+
+  - name: stg_ga4_site_period
+    description: "Utenti unici di sito per settimana o mese."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [period_type, period_start]

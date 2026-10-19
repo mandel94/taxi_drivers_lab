@@ -1,0 +1,12 @@
+name: TaxiDrivers warehouse
+docPath: docs/db
+
+er:
+  format: mermaid
+  comment: true
+
+format:
+  adjust: true
+
+exclude:
+  - alembic_version

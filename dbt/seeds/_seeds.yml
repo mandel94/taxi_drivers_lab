@@ -1,0 +1,33 @@
+version: 2
+
+seeds:
+  - name: dim_section
+    description: "Sezioni editoriali con priorita' per la regola della sezione primaria. La priorita' e' PROVVISORIA (dal piu' specifico al piu' generico) e va validata con la redazione. 'non_classificato' raccoglie gli articoli senza categoria mappata."
+    columns:
+      - name: section_key
+        data_tests: [unique, not_null]
+      - name: priority
+        description: "Priorita' piu' bassa = vince come sezione primaria."
+
+  - name: section_category_map
+    description: "Mappa sezione-categoria WordPress, derivata da CATEGORIES in wp_client/posts-service.js. include_children e' per categoria, non per sezione."
+    columns:
+      - name: category_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_categories')
+                field: category_id
+      - name: section_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_section')
+                field: section_key
+
+  - name: dim_channel
+    description: "Gruppi di canali GA4 (sessionDefaultChannelGroup) con etichetta italiana, ordine e flag organico. Un gruppo non presente qui compare comunque nei mart con il nome grezzo e un avviso dei test."
+    columns:
+      - name: channel_group
+        data_tests: [unique, not_null]

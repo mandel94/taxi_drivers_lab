@@ -1,0 +1,754 @@
+{
+  "name": "taxidrivers",
+  "tables": [
+    {
+      "name": "public.alembic_version",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "version_num",
+          "type": "varchar(32)",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "alembic_version_pkc",
+          "def": "CREATE UNIQUE INDEX alembic_version_pkc ON public.alembic_version USING btree (version_num)",
+          "table": "public.alembic_version",
+          "columns": [
+            "version_num"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "alembic_version_pkc",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (version_num)",
+          "table": "public.alembic_version",
+          "referenced_table": "",
+          "columns": [
+            "version_num"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.categories_dim",
+      "type": "BASE TABLE",
+      "comment": "Dimension: categorie e tassonomie custom WordPress, gerarchia via parent_id (adjacency list)",
+      "columns": [
+        {
+          "name": "category_id",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "parent_id",
+          "type": "integer",
+          "nullable": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "slug",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "wp_taxonomy",
+          "type": "text",
+          "nullable": false,
+          "default": "'category'::text",
+          "comment": "Distingue category standard da tassonomie custom (Recensioni, Serie TV, Festival...), da confermare via /wp/v2/taxonomies"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "categories_dim_pkey",
+          "def": "CREATE UNIQUE INDEX categories_dim_pkey ON public.categories_dim USING btree (category_id)",
+          "table": "public.categories_dim",
+          "columns": [
+            "category_id"
+          ]
+        },
+        {
+          "name": "categories_dim_slug_key",
+          "def": "CREATE UNIQUE INDEX categories_dim_slug_key ON public.categories_dim USING btree (slug)",
+          "table": "public.categories_dim",
+          "columns": [
+            "slug"
+          ]
+        },
+        {
+          "name": "idx_categories_dim_parent",
+          "def": "CREATE INDEX idx_categories_dim_parent ON public.categories_dim USING btree (parent_id)",
+          "table": "public.categories_dim",
+          "columns": [
+            "parent_id"
+          ]
+        },
+        {
+          "name": "idx_categories_dim_taxonomy",
+          "def": "CREATE INDEX idx_categories_dim_taxonomy ON public.categories_dim USING btree (wp_taxonomy)",
+          "table": "public.categories_dim",
+          "columns": [
+            "wp_taxonomy"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "categories_dim_parent_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (parent_id) REFERENCES categories_dim(category_id)",
+          "table": "public.categories_dim",
+          "referenced_table": "public.categories_dim",
+          "columns": [
+            "parent_id"
+          ],
+          "referenced_columns": [
+            "category_id"
+          ]
+        },
+        {
+          "name": "categories_dim_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (category_id)",
+          "table": "public.categories_dim",
+          "referenced_table": "",
+          "columns": [
+            "category_id"
+          ]
+        },
+        {
+          "name": "categories_dim_slug_key",
+          "type": "UNIQUE",
+          "def": "UNIQUE (slug)",
+          "table": "public.categories_dim",
+          "referenced_table": "",
+          "columns": [
+            "slug"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.articles_dim",
+      "type": "BASE TABLE",
+      "comment": "Dimension: un articolo = una riga, attributi descrittivi stabili. Le metriche di performance vivono nelle fact table separate.",
+      "columns": [
+        {
+          "name": "article_id",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "slug",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "link",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": false,
+          "default": "'publish'::text"
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "excerpt",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "content_html",
+          "type": "text",
+          "nullable": true,
+          "comment": "content.rendered integrale, serve da input per feature engineering testuale (word count, NLP)"
+        },
+        {
+          "name": "author_wp_id",
+          "type": "integer",
+          "nullable": true,
+          "comment": "ID autore WordPress, denormalizzato: nessuna tabella authors dedicata per scelta di semplicita e privacy"
+        },
+        {
+          "name": "author_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "featured_media_url",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "format",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "comment_status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "published_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "ingested_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "articles_dim_pkey",
+          "def": "CREATE UNIQUE INDEX articles_dim_pkey ON public.articles_dim USING btree (article_id)",
+          "table": "public.articles_dim",
+          "columns": [
+            "article_id"
+          ]
+        },
+        {
+          "name": "articles_dim_slug_key",
+          "def": "CREATE UNIQUE INDEX articles_dim_slug_key ON public.articles_dim USING btree (slug)",
+          "table": "public.articles_dim",
+          "columns": [
+            "slug"
+          ]
+        },
+        {
+          "name": "idx_articles_dim_published_at",
+          "def": "CREATE INDEX idx_articles_dim_published_at ON public.articles_dim USING btree (published_at)",
+          "table": "public.articles_dim",
+          "columns": [
+            "published_at"
+          ]
+        },
+        {
+          "name": "idx_articles_dim_author",
+          "def": "CREATE INDEX idx_articles_dim_author ON public.articles_dim USING btree (author_wp_id)",
+          "table": "public.articles_dim",
+          "columns": [
+            "author_wp_id"
+          ]
+        },
+        {
+          "name": "idx_articles_dim_status",
+          "def": "CREATE INDEX idx_articles_dim_status ON public.articles_dim USING btree (status)",
+          "table": "public.articles_dim",
+          "columns": [
+            "status"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "articles_dim_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (article_id)",
+          "table": "public.articles_dim",
+          "referenced_table": "",
+          "columns": [
+            "article_id"
+          ]
+        },
+        {
+          "name": "articles_dim_slug_key",
+          "type": "UNIQUE",
+          "def": "UNIQUE (slug)",
+          "table": "public.articles_dim",
+          "referenced_table": "",
+          "columns": [
+            "slug"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.articles_categories",
+      "type": "BASE TABLE",
+      "comment": "Bridge many-to-many tra articles_dim e categories_dim",
+      "columns": [
+        {
+          "name": "article_id",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "category_id",
+          "type": "integer",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "articles_categories_pkey",
+          "def": "CREATE UNIQUE INDEX articles_categories_pkey ON public.articles_categories USING btree (article_id, category_id)",
+          "table": "public.articles_categories",
+          "columns": [
+            "article_id",
+            "category_id"
+          ]
+        },
+        {
+          "name": "idx_articles_categories_category",
+          "def": "CREATE INDEX idx_articles_categories_category ON public.articles_categories USING btree (category_id)",
+          "table": "public.articles_categories",
+          "columns": [
+            "category_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "articles_categories_category_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (category_id) REFERENCES categories_dim(category_id) ON DELETE CASCADE",
+          "table": "public.articles_categories",
+          "referenced_table": "public.categories_dim",
+          "columns": [
+            "category_id"
+          ],
+          "referenced_columns": [
+            "category_id"
+          ]
+        },
+        {
+          "name": "articles_categories_article_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (article_id) REFERENCES articles_dim(article_id) ON DELETE CASCADE",
+          "table": "public.articles_categories",
+          "referenced_table": "public.articles_dim",
+          "columns": [
+            "article_id"
+          ],
+          "referenced_columns": [
+            "article_id"
+          ]
+        },
+        {
+          "name": "articles_categories_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (article_id, category_id)",
+          "table": "public.articles_categories",
+          "referenced_table": "",
+          "columns": [
+            "article_id",
+            "category_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.fact_wp_engagement_weekly",
+      "type": "BASE TABLE",
+      "comment": "Fact table grain settimanale: metriche di engagement native WP REST API (commenti, flag modifica). Grain diverso da fact_ga4_daily/fact_gsc_daily (giornaliere).",
+      "columns": [
+        {
+          "name": "article_id",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "week_start_date",
+          "type": "date",
+          "nullable": false,
+          "comment": "Lunedi della settimana ISO di riferimento, usato come chiave temporale al posto di una data singola"
+        },
+        {
+          "name": "comment_count",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "was_modified_in_week",
+          "type": "boolean",
+          "nullable": false,
+          "default": "false"
+        },
+        {
+          "name": "loaded_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "fact_wp_engagement_weekly_pkey",
+          "def": "CREATE UNIQUE INDEX fact_wp_engagement_weekly_pkey ON public.fact_wp_engagement_weekly USING btree (article_id, week_start_date)",
+          "table": "public.fact_wp_engagement_weekly",
+          "columns": [
+            "article_id",
+            "week_start_date"
+          ]
+        },
+        {
+          "name": "idx_fact_wp_engagement_weekly_week",
+          "def": "CREATE INDEX idx_fact_wp_engagement_weekly_week ON public.fact_wp_engagement_weekly USING btree (week_start_date)",
+          "table": "public.fact_wp_engagement_weekly",
+          "columns": [
+            "week_start_date"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "fact_wp_engagement_weekly_article_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (article_id) REFERENCES articles_dim(article_id) ON DELETE CASCADE",
+          "table": "public.fact_wp_engagement_weekly",
+          "referenced_table": "public.articles_dim",
+          "columns": [
+            "article_id"
+          ],
+          "referenced_columns": [
+            "article_id"
+          ]
+        },
+        {
+          "name": "fact_wp_engagement_weekly_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (article_id, week_start_date)",
+          "table": "public.fact_wp_engagement_weekly",
+          "referenced_table": "",
+          "columns": [
+            "article_id",
+            "week_start_date"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.fact_ga4_daily_legacy_pagepath",
+      "type": "BASE TABLE",
+      "comment": "Archivio della fact_ga4_daily pre-restyling (0003): formato wide, grain (page_path, event_date), otto colonne metriche fisse. I dati qui presenti non vengono piu' aggiornati: il backfill dei record risolvibili via slug e' gia' stato eseguito nella nuova fact_ga4_daily (formato long, grain per article_id). Usare questa tabella solo per diagnostica o recupero storico.",
+      "columns": [
+        {
+          "name": "page_path",
+          "type": "text",
+          "nullable": false,
+          "comment": "pagePath grezzo da GA4 (dimensione standard), es. /slug-articolo/. Non normalizzato in questa tabella."
+        },
+        {
+          "name": "event_date",
+          "type": "date",
+          "nullable": false
+        },
+        {
+          "name": "active_users",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "screen_page_views",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "sessions",
+          "type": "integer",
+          "nullable": false,
+          "default": "0",
+          "comment": "ATTENZIONE: sessions, active_users, engagement_rate, bounce_rate, average_session_duration ed engaged_sessions sono metriche di sessione/utente riportate per pagina (attribuzione \"a tocco\": una sessione che visita piu pagine contribuisce a ciascuna). Sommare queste colonne su piu articoli NON torna al totale sessioni del sito. screen_page_views e user_engagement_duration sono invece genuinamente per-pagina e sommano correttamente."
+        },
+        {
+          "name": "engaged_sessions",
+          "type": "integer",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "engagement_rate",
+          "type": "numeric(6,4)",
+          "nullable": true
+        },
+        {
+          "name": "bounce_rate",
+          "type": "numeric(6,4)",
+          "nullable": true
+        },
+        {
+          "name": "average_session_duration",
+          "type": "numeric(10,2)",
+          "nullable": true
+        },
+        {
+          "name": "user_engagement_duration",
+          "type": "numeric(12,2)",
+          "nullable": true
+        },
+        {
+          "name": "loaded_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "fact_ga4_daily_pkey",
+          "def": "CREATE UNIQUE INDEX fact_ga4_daily_pkey ON public.fact_ga4_daily_legacy_pagepath USING btree (page_path, event_date)",
+          "table": "public.fact_ga4_daily_legacy_pagepath",
+          "columns": [
+            "page_path",
+            "event_date"
+          ]
+        },
+        {
+          "name": "idx_fact_ga4_daily_event_date",
+          "def": "CREATE INDEX idx_fact_ga4_daily_event_date ON public.fact_ga4_daily_legacy_pagepath USING btree (event_date)",
+          "table": "public.fact_ga4_daily_legacy_pagepath",
+          "columns": [
+            "event_date"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "fact_ga4_daily_pkey",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (page_path, event_date)",
+          "table": "public.fact_ga4_daily_legacy_pagepath",
+          "referenced_table": "",
+          "columns": [
+            "page_path",
+            "event_date"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public.fact_ga4_daily",
+      "type": "BASE TABLE",
+      "comment": "Fact table GA4 in formato long: una riga per (article_id, metric_date, metric_name). Grain rigorosamente giornaliero: metric_date e' una singola DATE, non un intervallo. Strutturalmente impossibile memorizzare una misurazione su piu' di un giorno. Scritture idempotenti via INSERT ... ON CONFLICT (article_id, metric_date, metric_name) DO UPDATE.",
+      "columns": [
+        {
+          "name": "article_id",
+          "type": "integer",
+          "nullable": false
+        },
+        {
+          "name": "metric_date",
+          "type": "date",
+          "nullable": false,
+          "comment": "Singolo giorno civile (DATE, no time, no range). Chiave temporale della fact: il grain e' giornaliero."
+        },
+        {
+          "name": "metric_name",
+          "type": "text",
+          "nullable": false,
+          "comment": "Nome della metrica GA4: il vocabolario e' fissato dalla CHECK constraint. Una riga per ogni combinazione (articolo, giorno, metrica)."
+        },
+        {
+          "name": "metric_value",
+          "type": "numeric",
+          "nullable": false,
+          "comment": "Valore numerico della metrica per (article_id, metric_date). Le unita' dipendono da metric_name: interi per active_users/sessions/etc., 0-1 per engagement_rate/bounce_rate, secondi per *_duration."
+        },
+        {
+          "name": "fetched_at",
+          "type": "timestamp with time zone",
+          "nullable": false,
+          "default": "now()",
+          "comment": "Timestamp di quando la riga e' stata osservata/scritta. Distinto da metric_date: fetched_at cambia a ogni re-ingest (idempotenza), metric_date identifica il giorno a cui il dato si riferisce."
+        }
+      ],
+      "indexes": [
+        {
+          "name": "fact_ga4_daily_pkey1",
+          "def": "CREATE UNIQUE INDEX fact_ga4_daily_pkey1 ON public.fact_ga4_daily USING btree (article_id, metric_date, metric_name)",
+          "table": "public.fact_ga4_daily",
+          "columns": [
+            "article_id",
+            "metric_date",
+            "metric_name"
+          ]
+        },
+        {
+          "name": "idx_fact_ga4_daily_date",
+          "def": "CREATE INDEX idx_fact_ga4_daily_date ON public.fact_ga4_daily USING btree (metric_date)",
+          "table": "public.fact_ga4_daily",
+          "columns": [
+            "metric_date"
+          ]
+        },
+        {
+          "name": "idx_fact_ga4_daily_metric_name",
+          "def": "CREATE INDEX idx_fact_ga4_daily_metric_name ON public.fact_ga4_daily USING btree (metric_name)",
+          "table": "public.fact_ga4_daily",
+          "columns": [
+            "metric_name"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "chk_fact_ga4_daily_metric_name",
+          "type": "CHECK",
+          "def": "CHECK ((metric_name = ANY (ARRAY['active_users'::text, 'screen_page_views'::text, 'sessions'::text, 'engaged_sessions'::text, 'engagement_rate'::text, 'bounce_rate'::text, 'average_session_duration'::text, 'user_engagement_duration'::text])))",
+          "table": "public.fact_ga4_daily",
+          "referenced_table": "",
+          "columns": [
+            "metric_name"
+          ]
+        },
+        {
+          "name": "fact_ga4_daily_article_id_fkey",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (article_id) REFERENCES articles_dim(article_id)",
+          "table": "public.fact_ga4_daily",
+          "referenced_table": "public.articles_dim",
+          "columns": [
+            "article_id"
+          ],
+          "referenced_columns": [
+            "article_id"
+          ]
+        },
+        {
+          "name": "fact_ga4_daily_pkey1",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (article_id, metric_date, metric_name)",
+          "table": "public.fact_ga4_daily",
+          "referenced_table": "",
+          "columns": [
+            "article_id",
+            "metric_date",
+            "metric_name"
+          ]
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "table": "public.categories_dim",
+      "columns": [
+        "parent_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.categories_dim",
+      "parent_columns": [
+        "category_id"
+      ],
+      "parent_cardinality": "zero_or_one",
+      "def": "FOREIGN KEY (parent_id) REFERENCES categories_dim(category_id)"
+    },
+    {
+      "table": "public.articles_categories",
+      "columns": [
+        "category_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.categories_dim",
+      "parent_columns": [
+        "category_id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (category_id) REFERENCES categories_dim(category_id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.articles_categories",
+      "columns": [
+        "article_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.articles_dim",
+      "parent_columns": [
+        "article_id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (article_id) REFERENCES articles_dim(article_id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.fact_wp_engagement_weekly",
+      "columns": [
+        "article_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.articles_dim",
+      "parent_columns": [
+        "article_id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (article_id) REFERENCES articles_dim(article_id) ON DELETE CASCADE"
+    },
+    {
+      "table": "public.fact_ga4_daily",
+      "columns": [
+        "article_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "public.articles_dim",
+      "parent_columns": [
+        "article_id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (article_id) REFERENCES articles_dim(article_id)"
+    }
+  ],
+  "driver": {
+    "name": "postgres",
+    "database_version": "PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+    "meta": {
+      "current_schema": "public",
+      "search_paths": [
+        "taxidrivers",
+        "public"
+      ],
+      "dict": {
+        "Functions": "Stored procedures and functions"
+      }
+    }
+  }
+}
