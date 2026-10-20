@@ -52,7 +52,7 @@ import ingest_ga4_site as ing  # noqa: E402
 
 SCRATCH_DB = "td_test_ga4_site"
 _user = os.getenv("POSTGRES_USER", "postgres")
-_password = quote_plus(os.getenv("POSTGRES_PASSWORD", "postgres"))
+_password = quote_plus(os.environ["POSTGRES_PASSWORD"])
 _host = os.getenv("POSTGRES_HOST", "localhost")
 _port = os.getenv("POSTGRES_PORT", "5434")
 _base = f"postgresql://{_user}:{_password}@{_host}:{_port}"

@@ -19,7 +19,7 @@ Cosa verifica:
   5. DOWN: ripristina la tabella wide originale (dati intatti) e le viste.
 
 Esecuzione:
-    DATABASE_URL=postgresql://postgres:postgres@localhost:5432/td_test_fact_ga4 \\
+    DATABASE_URL=postgresql://postgres:<password>@localhost:5432/td_test_fact_ga4 \\
         .venv/Scripts/python.exe tests/test_fact_ga4_daily_long_format.py
 
 Lo script ricrea il DB da zero ogni volta: lascia il DB pulito dopo
@@ -36,10 +36,7 @@ from contextlib import contextmanager
 import psycopg2
 from psycopg2 import errors as pg_errors
 
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL",
-    "postgresql://postgres:postgres@localhost:5432/td_test_fact_ga4",
-)
+DATABASE_URL = os.environ["DATABASE_URL"]
 ADMIN_URL = DATABASE_URL.rsplit("/", 1)[0] + "/postgres"
 ALEMBIC_CMD = [sys.executable, "-m", "alembic"]
 

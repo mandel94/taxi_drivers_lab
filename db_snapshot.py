@@ -63,7 +63,7 @@ def build_database_url(explicit: str | None = None) -> str:
     if url:
         return _to_psycopg_url(url)
     user = os.getenv("POSTGRES_USER", "postgres")
-    password = os.getenv("POSTGRES_PASSWORD", "postgres")
+    password = os.environ["POSTGRES_PASSWORD"]
     host = os.getenv("POSTGRES_HOST", "localhost")
     port = os.getenv("POSTGRES_PORT", "5434")
     db = os.getenv("POSTGRES_DB", "postgres")
