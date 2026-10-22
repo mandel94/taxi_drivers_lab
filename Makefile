@@ -60,7 +60,7 @@ VENV = .venv
 VENV_BIN = $(VENV)/Scripts
 VENV_ALEMBIC = $(VENV_BIN)/alembic
 
-.PHONY: init check-env venv up wait-db migrate install ingest ingest-recent ingest-ga4 ingest-ga4-site dbt-build refresh verify-ingestion metabase wait-metabase status down clean help db_docs
+.PHONY: init check-env venv up wait-db migrate install ingest ingest-recent ingest-ga4 ingest-ga4-site ingest-article-scores dbt-build refresh verify-ingestion metabase wait-metabase status down clean help db_docs
 
 ## Target principale: esegue l'intera inizializzazione da zero (incluso l'ambiente Python).
 ## Metabase parte in background insieme a Postgres (stesso docker-compose.yml);
@@ -157,6 +157,15 @@ ingest-ga4-site: check-env venv up wait-db migrate
 	@echo "==> Eseguo ingestion GA4 sito/canali/periodi ($(GA4_SITE_ARGS))..."
 	cd ga4_client && DATABASE_URL=$(DATABASE_URL) GA4_PROPERTY_ID=$(GA4_PROPERTY_ID) ../$(VENV_BIN)/python ingest_ga4_site.py $(GA4_SITE_ARGS)
 
+## Score editoriale per settimana in fact_article_score_period (metodo balanced-v2).
+## Di default carica le settimane complete mancanti dal primo giorno con articoli.
+## Backfill o ricalcolo di un range: make ingest-article-scores ARTICLE_SCORE_ARGS="--start 2026-08-17 --end 2026-10-18"
+ARTICLE_SCORE_ARGS ?= --auto --floor $(GA4_ARTICLES_START)
+
+ingest-article-scores: check-env venv up wait-db migrate
+	@echo "==> Eseguo ingestion score editoriale per periodo ($(ARTICLE_SCORE_ARGS))..."
+	cd ga4_client && DATABASE_URL=$(DATABASE_URL) GA4_PROPERTY_ID=$(GA4_PROPERTY_ID) ../$(VENV_BIN)/python article_score_job.py $(ARTICLE_SCORE_ARGS)
+
 ## Costruisce e testa i modelli dbt (staging, intermediate, marts). Se la cartella
 ## dbt/ non esiste ancora salta con un avviso, cosi' 'make refresh' resta usabile.
 dbt-build:
@@ -181,6 +190,7 @@ refresh:
 	$(MAKE) ingest-recent || rc=1; \
 	$(MAKE) ingest-ga4 GA4_ARGS="--auto --floor $(GA4_ARTICLES_START)" || rc=1; \
 	$(MAKE) ingest-ga4-site GA4_SITE_ARGS="--auto --floor $(GA4_SITE_START)" || rc=1; \
+	$(MAKE) ingest-article-scores || rc=1; \
 	$(MAKE) dbt-build || rc=1; \
 	if [ $$rc -ne 0 ]; then echo "==> refresh terminato con errori (vedi sopra)"; fi; \
 	exit $$rc
@@ -266,6 +276,7 @@ help:
 	@echo "  make ingest-recent     - ingestion incrementale degli articoli recenti (da lanciare prima di ingest-ga4)"
 	@echo "  make ingest-ga4        - esegue l'ingestion GA4 (ultimi GA4_DAYS giorni, default 30; GA4_ARGS per range esplicito)"
 	@echo "  make ingest-ga4-site   - ingestion GA4 di sito, canali e utenti su periodo (GA4_SITE_ARGS, default ultimi 3 giorni)"
+	@echo "  make ingest-article-scores - score editoriale per settimana (ARTICLE_SCORE_ARGS, default settimane mancanti)"
 	@echo "  make dbt-build         - costruisce e testa i modelli dbt (salta se dbt/ non esiste)"
 	@echo "  make refresh           - aggiornamento giornaliero: articoli, GA4, sito/canali, dbt"
 	@echo "  make verify-ingestion  - esegue le query di verifica post-ingestion (scripts/verifiche_post_ingestion.sql)"

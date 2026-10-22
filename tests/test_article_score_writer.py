@@ -1,8 +1,8 @@
 """
 tests/test_article_score_writer.py
 
-Test delle funzioni pure di ga4_client/article_score_writer.py: normalizzazione
-del path, costruzione delle righe, validazioni. Nessun database.
+Test delle funzioni pure di ga4_client/article_score_writer.py: costruzione delle
+righe e validazioni. Nessun database.
 
 Esecuzione (dalla root del repo):
     python -m pytest tests/test_article_score_writer.py
@@ -22,16 +22,15 @@ from article_score_writer import (  # noqa: E402
     FACT_COLUMNS,
     METHOD_VERSION_RE,
     build_rows,
-    clean_page_path,
 )
 
 
-PERIOD = (dt.date(2026, 10, 19), dt.date(2026, 10, 22))
+PERIOD = (dt.date(2026, 10, 12), dt.date(2026, 10, 18))
 
 
 def _scored(**overrides):
     base = {
-        "pagePath": "/560495/latest-news/si-fara/slow-horses-7.html",
+        "article_id": 42,
         "activeUsers": 276,
         "screenPageViews": 301,
         "sessions": 276,
@@ -51,27 +50,9 @@ def _scored(**overrides):
     return pd.DataFrame([base])
 
 
-@pytest.mark.parametrize(
-    "raw, expected",
-    [
-        ("/560495/a/b.html", "560495/a/b.html"),
-        ("560495/a/b.html/", "560495/a/b.html"),
-        ("/a/b/?utm_source=x", "a/b"),
-        ("/", None),
-        ("", None),
-        (None, None),
-        (float("nan"), None),
-    ],
-)
-def test_clean_page_path(raw, expected):
-    assert clean_page_path(raw) == expected
-
-
 def test_build_rows_maps_columns_in_fact_order():
-    slug = clean_page_path("/560495/latest-news/si-fara/slow-horses-7.html")
-    rows, unmatched = build_rows(_scored(), *PERIOD, "balanced-v2", {slug: 42})
+    rows = build_rows(_scored(), *PERIOD, "balanced-v2")
 
-    assert unmatched == []
     assert len(rows) == 1
     row = dict(zip(FACT_COLUMNS, rows[0]))
     assert row["article_id"] == 42
@@ -84,35 +65,26 @@ def test_build_rows_maps_columns_in_fact_order():
     assert set(COLUMN_MAP.values()) <= set(row)
 
 
-def test_build_rows_reports_unmatched_paths():
-    rows, unmatched = build_rows(_scored(), *PERIOD, "balanced-v2", {})
-    assert rows == []
-    assert unmatched == ["/560495/latest-news/si-fara/slow-horses-7.html"]
-
-
 def test_build_rows_converts_nan_to_none():
-    slug = clean_page_path("/560495/latest-news/si-fara/slow-horses-7.html")
-    rows, _ = build_rows(_scored(engagementRate=float("nan")), *PERIOD, "balanced-v2", {slug: 42})
+    rows = build_rows(_scored(engagementRate=float("nan")), *PERIOD, "balanced-v2")
     row = dict(zip(FACT_COLUMNS, rows[0]))
     assert row["engagement_rate"] is None
 
 
-def test_build_rows_rejects_duplicate_article_after_resolution():
-    df = pd.concat([_scored(), _scored(pagePath="/560495/latest-news/si-fara/slow-horses-7.html/")])
-    slug = clean_page_path("/560495/latest-news/si-fara/slow-horses-7.html")
-    with pytest.raises(ValueError, match="compare piu' volte"):
-        build_rows(df, *PERIOD, "balanced-v2", {slug: 42})
+def test_build_rows_rejects_duplicate_article():
+    df = pd.concat([_scored(), _scored()])
+    with pytest.raises(ValueError, match="article_id duplicati"):
+        build_rows(df, *PERIOD, "balanced-v2")
 
 
 def test_build_rows_rejects_unknown_segment():
-    slug = clean_page_path("/560495/latest-news/si-fara/slow-horses-7.html")
     with pytest.raises(ValueError, match="Segmenti fuori vocabolario"):
-        build_rows(_scored(content_segment="Standard"), *PERIOD, "balanced-v2", {slug: 42})
+        build_rows(_scored(content_segment="Standard"), *PERIOD, "balanced-v2")
 
 
 def test_build_rows_rejects_missing_columns():
     with pytest.raises(ValueError, match="Colonne mancanti"):
-        build_rows(_scored().drop(columns=["editorial_score"]), *PERIOD, "balanced-v2", {})
+        build_rows(_scored().drop(columns=["editorial_score"]), *PERIOD, "balanced-v2")
 
 
 @pytest.mark.parametrize("version", ["balanced-v2", "quality-v10", "deep-dive-v1"])
