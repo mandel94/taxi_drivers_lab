@@ -43,7 +43,7 @@ Tutti i mart usano le stesse chiavi di filtro: `date_day`, `week_start_date` (il
 ### Release 1 · Contenuti
 
 **`mart_article_daily`** · una riga per articolo e giorno **con traffico** (sparso: l'assenza di riga vale zero).
-`date_day`, `week_start_date`, `article_id`, `title`, `link`, `section_key`, `section_name`, `age_days`, `age_bucket`, `is_new_30d`, `views`, `engagement_seconds`, `sessions_attributed`, `engaged_sessions_attributed`, `is_provisional`.
+`date_day`, `week_start_date`, `article_id`, `title`, `link`, `published_date`, `section_key`, `section_name`, `age_days`, `age_bucket`, `is_new_30d`, `views`, `engagement_seconds`, `sessions_attributed`, `engaged_sessions_attributed`, `is_provisional`.
 
 **`mart_article_weekly`** · una riga per articolo e settimana con traffico (sparso).
 `week_start_date`, `article_id`, `title`, `link`, `section_key`, `section_name`, `age_bucket` (al lunedì, minimo 0), `weeks_since_publication`, `active_days`, `views`, `engagement_seconds`, `sessions_attributed`, `engaged_sessions_attributed`, `is_complete_week`.

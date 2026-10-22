@@ -1,0 +1,591 @@
+{
+ "totali": {
+  "traffico_non_brand": 78611.0,
+  "guadagno_lordo": 32876.220223642435,
+  "guadagno_corretto": 21632.91809771603,
+  "guadagno_corretto_vivo": 13770.782933780145
+ },
+ "fattori_serp": {
+  "AI overview": 0.9779065555957986,
+  "Image": 1.0,
+  "Image pack": 1.0,
+  "Knowledge panel": 0.8554147465437788,
+  "People also ask": 0.7875894988066825,
+  "People also search": 0.9993979530403372,
+  "Related searches": 1.0,
+  "Reviews": 0.8462156643172385,
+  "Short videos": 0.46253918495297813,
+  "Sitelinks": 1.0,
+  "Video": 0.9042316258351893,
+  "Video Carousel": 0.516297262059974
+ },
+ "per_intento": {
+  "capire": {
+   "righe": 371.0,
+   "q_traffico": 0.020251618730203154,
+   "q_guad_lordo": 0.023865255577884992,
+   "q_guad_vivo": 0.01584806864614906,
+   "guad_vivo_per_kw": 0.5882488227648671,
+   "q_a_picco": 0.660377358490566,
+   "ultimi3_med": 0.4028776978417266
+  },
+  "chi": {
+   "righe": 938.0,
+   "q_traffico": 0.11288496520843139,
+   "q_guad_lordo": 0.14436580534137683,
+   "q_guad_vivo": 0.16653479001351296,
+   "guad_vivo_per_kw": 2.4448981281436506,
+   "q_a_picco": 0.4232409381663113,
+   "ultimi3_med": 0.7101018675721562
+  },
+  "domanda generica": {
+   "righe": 24.0,
+   "q_traffico": 0.0015010621923140528,
+   "q_guad_lordo": 0.0014043188951361934,
+   "q_guad_vivo": 0.002091809230882126,
+   "guad_vivo_per_kw": 1.2002437857231396,
+   "q_a_picco": 0.4166666666666667,
+   "ultimi3_med": 0.8573584905660376
+  },
+  "esplorare un genere o tema": {
+   "righe": 615.0,
+   "q_traffico": 0.07888209029270712,
+   "q_guad_lordo": 0.09182800861558901,
+   "q_guad_vivo": 0.03956733753147761,
+   "guad_vivo_per_kw": 0.8859727096155944,
+   "q_a_picco": 0.3382113821138211,
+   "ultimi3_med": 0.8188289565567006
+  },
+  "guardare": {
+   "righe": 932.0,
+   "q_traffico": 0.07370469781582731,
+   "q_guad_lordo": 0.06918680632816965,
+   "q_guad_vivo": 0.08508222589919669,
+   "guad_vivo_per_kw": 1.257133974657387,
+   "q_a_picco": 0.4012875536480687,
+   "ultimi3_med": 0.7172413793103447
+  },
+  "quando": {
+   "righe": 319.0,
+   "q_traffico": 0.012250193993207058,
+   "q_guad_lordo": 0.023787236645725303,
+   "q_guad_vivo": 0.017697202271494402,
+   "guad_vivo_per_kw": 0.7639634201126969,
+   "q_a_picco": 0.6206896551724138,
+   "ultimi3_med": 0.5698051948051949
+  },
+  "scegliere": {
+   "righe": 405.0,
+   "q_traffico": 0.03474068514584473,
+   "q_guad_lordo": 0.03607344019231036,
+   "q_guad_vivo": 0.037436424042910206,
+   "guad_vivo_per_kw": 1.272910788424357,
+   "q_a_picco": 0.3308641975308642,
+   "ultimi3_med": 0.7756653992395437
+  },
+  "secco: altro": {
+   "righe": 1601.0,
+   "q_traffico": 0.1814631540115251,
+   "q_guad_lordo": 0.13845814052382696,
+   "q_guad_vivo": 0.1291091025536183,
+   "guad_vivo_per_kw": 1.1105143198257572,
+   "q_a_picco": 0.37851342910680824,
+   "ultimi3_med": 0.8023774145616641
+  },
+  "secco: film": {
+   "righe": 2300.0,
+   "q_traffico": 0.2158985383724924,
+   "q_guad_lordo": 0.24873276611371387,
+   "q_guad_vivo": 0.28358733358158617,
+   "guad_vivo_per_kw": 1.6979215710963147,
+   "q_a_picco": 0.26956521739130435,
+   "ultimi3_med": 0.8764044943820224
+  },
+  "secco: persona": {
+   "righe": 227.0,
+   "q_traffico": 0.06525804276755162,
+   "q_guad_lordo": 0.02833028496467702,
+   "q_guad_vivo": 0.04148924895341825,
+   "guad_vivo_per_kw": 2.5169138388682275,
+   "q_a_picco": 0.27312775330396477,
+   "ultimi3_med": 0.8513119533527697
+  },
+  "secco: serie": {
+   "righe": 1418.0,
+   "q_traffico": 0.15117477197847629,
+   "q_guad_lordo": 0.1129815421932227,
+   "q_guad_vivo": 0.08862907853146682,
+   "guad_vivo_per_kw": 0.8607135416627527,
+   "q_a_picco": 0.43582510578279265,
+   "ultimi3_med": 0.7441860465116279
+  },
+  "seguire una serie": {
+   "righe": 612.0,
+   "q_traffico": 0.04293292287338922,
+   "q_guad_lordo": 0.046690624896770436,
+   "q_guad_vivo": 0.02982264134553223,
+   "guad_vivo_per_kw": 0.6710475824857866,
+   "q_a_picco": 0.6029411764705882,
+   "ultimi3_med": 0.5375642794431206
+  },
+  "settore": {
+   "righe": 7.0,
+   "q_traffico": 0.009057256618030555,
+   "q_guad_lordo": 0.03429576971159666,
+   "q_guad_vivo": 0.0631047373987552,
+   "guad_vivo_per_kw": 124.14309154449369,
+   "q_a_picco": 0.5714285714285714,
+   "ultimi3_med": 0.064
+  }
+ },
+ "per_fascia": {
+  "1-3": {
+   "righe": 974,
+   "traffico": 19978.0,
+   "guadagno_vivo": 0.0
+  },
+  "4-10": {
+   "righe": 4392,
+   "traffico": 46841.0,
+   "guadagno_vivo": 11787.167415843087
+  },
+  "11-20": {
+   "righe": 4403,
+   "traffico": 11792.0,
+   "guadagno_vivo": 1983.6155179370578
+  }
+ },
+ "concentrazione": {
+  "top10": 0.13041431860681074,
+  "top50": 0.3156682906972307,
+  "top100": 0.42494052995127907,
+  "url_per_50": 151,
+  "url_per_80": 617,
+  "url_totali": 3908
+ },
+ "per_url": {
+  "settore": {
+   "url": 4.0,
+   "q_traffico": 0.009006373153884317,
+   "mediano": 142.0,
+   "medio": 177.0,
+   "gv_per_url": 217.25041020286395
+  },
+  "secco: persona": {
+   "url": 98.0,
+   "q_traffico": 0.06971034588034754,
+   "mediano": 4.0,
+   "medio": 55.91836734693877,
+   "gv_per_url": 7.950395169453441
+  },
+  "esplorare un genere o tema": {
+   "url": 229.0,
+   "q_traffico": 0.07381918561015634,
+   "mediano": 3.0,
+   "medio": 25.34061135371179,
+   "gv_per_url": 2.143815189902464
+  },
+  "chi": {
+   "url": 333.0,
+   "q_traffico": 0.10717329635801605,
+   "mediano": 4.0,
+   "medio": 25.3003003003003,
+   "gv_per_url": 5.750627931924698
+  },
+  "scegliere": {
+   "url": 107.0,
+   "q_traffico": 0.03189121115365534,
+   "mediano": 3.0,
+   "medio": 23.429906542056074,
+   "gv_per_url": 5.2145719173253
+  },
+  "secco: serie": {
+   "url": 566.0,
+   "q_traffico": 0.15859103687779064,
+   "mediano": 5.0,
+   "medio": 22.026501766784452,
+   "gv_per_url": 2.4265551954484366
+  },
+  "seguire una serie": {
+   "url": 171.0,
+   "q_traffico": 0.046074976784419484,
+   "mediano": 5.0,
+   "medio": 21.181286549707604,
+   "gv_per_url": 2.3424000448658284
+  },
+  "guardare": {
+   "url": 277.0,
+   "q_traffico": 0.07072801516327232,
+   "mediano": 2.0,
+   "medio": 20.072202166064983,
+   "gv_per_url": 4.320559143134928
+  },
+  "secco: altro": {
+   "url": 830.0,
+   "q_traffico": 0.18226456857182838,
+   "mediano": 3.0,
+   "medio": 17.26265060240964,
+   "gv_per_url": 2.1867284596050327
+  },
+  "secco: film": {
+   "url": 1070.0,
+   "q_traffico": 0.224752261133938,
+   "mediano": 3.0,
+   "medio": 16.512149532710282,
+   "gv_per_url": 3.790705973639473
+  },
+  "domanda generica": {
+   "url": 7.0,
+   "q_traffico": 0.001259365737619417,
+   "mediano": 2.0,
+   "medio": 14.142857142857142,
+   "gv_per_url": 0.677964657592295
+  },
+  "capire": {
+   "url": 123.0,
+   "q_traffico": 0.01712228568520945,
+   "mediano": 3.0,
+   "medio": 10.94308943089431,
+   "gv_per_url": 1.3635693515559757
+  },
+  "quando": {
+   "url": 93.0,
+   "q_traffico": 0.007607077889862742,
+   "mediano": 2.0,
+   "medio": 6.43010752688172,
+   "gv_per_url": 1.553873810050165
+  }
+ },
+ "profilo_mensile": {
+  "tutto": [
+   107.14848917573552,
+   102.55376355690258,
+   97.44628132445396,
+   98.7080323557463,
+   112.82323579978961,
+   111.72736270100572,
+   106.86616322848177,
+   107.44028247953543,
+   93.55222053056507,
+   87.56113213177446,
+   79.51087545630824,
+   94.66216125970148
+  ],
+  "picco": [
+   112.41432711428871,
+   107.00739938906491,
+   84.85250893616623,
+   86.1586009868765,
+   131.56706672317614,
+   108.07770989821319,
+   117.91376588862563,
+   103.25588379046211,
+   83.65933464241881,
+   74.82687295846463,
+   70.442514853066,
+   119.82401481917744
+  ],
+  "resto": [
+   105.03362693586485,
+   100.76509737281549,
+   102.50418359799403,
+   103.74812641932232,
+   105.29535121372102,
+   113.19313376941625,
+   102.4292325861687,
+   109.12081782592146,
+   97.52539461080136,
+   92.67545661205845,
+   83.15290425421438,
+   84.55667480170196
+  ]
+ },
+ "azioni_spingere": [
+  {
+   "keyword": "box office italia",
+   "pos": 4,
+   "volume": 12100,
+   "guadagno": 761.7910202863961,
+   "slug": "box-office-italia-stabilita-in-classifica-e-successi-confermati"
+  },
+  {
+   "keyword": "rai premium stasera",
+   "pos": 5,
+   "volume": 14800,
+   "guadagno": 476.3401872590416,
+   "slug": "stasera-carlo-verdone-protagonista-su-rai-premium"
+  },
+  {
+   "keyword": "trap film",
+   "pos": 4,
+   "volume": 6600,
+   "guadagno": 415.52237470167057,
+   "slug": "trap-il-nuovo-incubo-di-m-night-shyamalan-al-cinema"
+  },
+  {
+   "keyword": "film di sandra bullock",
+   "pos": 5,
+   "volume": 9900,
+   "guadagno": 365.8225543943807,
+   "slug": "sandra-bullock-10-film-dellattrice-premio-oscar"
+  },
+  {
+   "keyword": "il silenzio degli innocenti",
+   "pos": 8,
+   "volume": 49500,
+   "guadagno": 287.513037809648,
+   "slug": "il-silenzio-degli-innocenti-trailer"
+  },
+  {
+   "keyword": "amore tossico",
+   "pos": 4,
+   "volume": 5400,
+   "guadagno": 222.8661668839635,
+   "slug": "stanotte-alle-0125-rai-movie-amore-tossico-claudio-caligari"
+  },
+  {
+   "keyword": "film di hugh grant",
+   "pos": 4,
+   "volume": 5400,
+   "guadagno": 222.8661668839635,
+   "slug": "hugh-grant-10-film-da-vedere-con-lattore-britannico"
+  },
+  {
+   "keyword": "movies ruiz",
+   "pos": 5,
+   "volume": 5400,
+   "guadagno": 199.53957512420766,
+   "slug": "i-film-di-raul-ruiz-e-valeria-sarmiento-su-mubi"
+  },
+  {
+   "keyword": "anna magnani",
+   "pos": 9,
+   "volume": 27100,
+   "guadagno": 187.15170563392547,
+   "slug": "anna-magnani-filmografia-e-vita-privata"
+  },
+  {
+   "keyword": "cabinet of curiosities",
+   "pos": 4,
+   "volume": 2900,
+   "guadagno": 182.5780131264916,
+   "slug": "cabinet-of-curiosities-con-netflix-alla-scoperta-del-mondo-di-guillermo-del-toro"
+  },
+  {
+   "keyword": "personaggi di zootropolis",
+   "pos": 4,
+   "volume": 2900,
+   "guadagno": 182.5780131264916,
+   "slug": "zootropolis-2-torna-a-ruggire-svelati-nuovi-membri-del-cast-e-dettagli-sulla-trama"
+  },
+  {
+   "keyword": "doc nelle tue mani",
+   "pos": 9,
+   "volume": 18100,
+   "guadagno": 124.99800265586904,
+   "slug": "il-trailer-di-doc-nelle-tue-mani-in-onda-su-rai1"
+  }
+ ],
+ "azioni_pagina2": [
+  {
+   "keyword": "tim vision",
+   "pos": 20,
+   "volume": 40500,
+   "guadagno": 125.9106896118578,
+   "slug": "tim-vision-serie-tv"
+  },
+  {
+   "keyword": "serie tv da vedere",
+   "pos": 16,
+   "volume": 40500,
+   "guadagno": 115.49049460949715,
+   "slug": "10-serie-tv-complete-vedere-streaming"
+  },
+  {
+   "keyword": "mia goth",
+   "pos": 14,
+   "volume": 60500,
+   "guadagno": 64.49945240628327,
+   "slug": "mia-goth-sara-la-protagonista-di-maxxxine"
+  },
+  {
+   "keyword": "film di jake gyllenhaal",
+   "pos": 12,
+   "volume": 22200,
+   "guadagno": 23.878748370273794,
+   "slug": "jake-gyllenhaal-protagonista-e-produttore-per-code-black"
+  },
+  {
+   "keyword": "wake up dead man: knives out",
+   "pos": 16,
+   "volume": 6600,
+   "guadagno": 18.820673195621758,
+   "slug": "knives-out-3-wake-up-dead-man-annunciata-la-data-di-uscita"
+  },
+  {
+   "keyword": "cosa vedere su netflix",
+   "pos": 15,
+   "volume": 6600,
+   "guadagno": 18.7708830548926,
+   "slug": "modifica-film-da-vedere-su-netflix-25-film-per-ogni-tipo-di-ser"
+  },
+  {
+   "keyword": "little italy italian",
+   "pos": 19,
+   "volume": 5400,
+   "guadagno": 17.13586720242408,
+   "slug": "italian-pavillon-la-little-italy-del-cinema-a-cannes-78"
+  },
+  {
+   "keyword": "lello arena",
+   "pos": 15,
+   "volume": 9900,
+   "guadagno": 16.535775862068967,
+   "slug": "lello-arena-e-il-filo-rosso-della-memoria-cinematografica"
+  }
+ ],
+ "azioni_proteggere": [
+  {
+   "keyword": "avengers doomsday",
+   "pos": 1,
+   "traffico": 962,
+   "ultimi3": 0.958217270194986,
+   "slug": "avengers-doomsday-box-office-da-urlo-prima-delluscita"
+  },
+  {
+   "keyword": "the great flood",
+   "pos": 2,
+   "traffico": 786,
+   "ultimi3": 0.3764705882352941,
+   "slug": "the-great-flood-sequel-netflix"
+  },
+  {
+   "keyword": "la meglio gioventù",
+   "pos": 3,
+   "traffico": 532,
+   "ultimi3": 1.090909090909091,
+   "slug": "la-meglio-gioventu-una-saga-familiare-che-racconta-la-storia-di-una-nazione"
+  },
+  {
+   "keyword": "arcane",
+   "pos": 1,
+   "traffico": 423,
+   "ultimi3": 0.8095238095238095,
+   "slug": "arcane-quando-il-soggetto-videoludico-non-ostacola-la-scrittura"
+  },
+  {
+   "keyword": "the one film",
+   "pos": 1,
+   "traffico": 396,
+   "ultimi3": 0.45161290322580644,
+   "slug": "the-one-la-storia-vera-dellunica-superstite-dellaeroflot-flight-811"
+  },
+  {
+   "keyword": "2001 odissea nello spazio",
+   "pos": 3,
+   "traffico": 325,
+   "ultimi3": 1.1146067415730336,
+   "slug": "2001-odissea-nello-spazio-di-stanley-kubrick"
+  },
+  {
+   "keyword": "film di eroi",
+   "pos": 3,
+   "traffico": 286,
+   "ultimi3": 1.0890052356020943,
+   "slug": "i-25-migliori-film-sui-supereroi-secondo-esquire"
+  },
+  {
+   "keyword": "serial killer netflix",
+   "pos": 1,
+   "traffico": 248,
+   "ultimi3": 0.7320261437908497,
+   "slug": "le-10-migliori-serie-e-docuserie-netflix-sui-serial-killer"
+  },
+  {
+   "keyword": "due forze opposte",
+   "pos": 1,
+   "traffico": 211,
+   "ultimi3": 4.0,
+   "slug": "due-forze-opposte-2-il-duello-continua"
+  },
+  {
+   "keyword": "rocco e i suoi fratelli",
+   "pos": 3,
+   "traffico": 158,
+   "ultimi3": 1.4545454545454546,
+   "slug": "rocco-e-i-suoi-fratelli-il-capolavoro-di-luchino-visconti-con-alain-delon"
+  }
+ ],
+ "fragili": [
+  {
+   "keyword": "james van der beek",
+   "pos": 9,
+   "traffico": 825,
+   "ultimi3": 0.1111111111111111,
+   "slug": "james-van-der-beek-indimenticabile-dawson"
+  },
+  {
+   "keyword": "the great flood",
+   "pos": 2,
+   "traffico": 786,
+   "ultimi3": 0.3764705882352941,
+   "slug": "the-great-flood-sequel-netflix"
+  },
+  {
+   "keyword": "stranger things 5",
+   "pos": 8,
+   "traffico": 550,
+   "ultimi3": 0.042704626334519574,
+   "slug": "stranger-things-5-la-data-di-uscita-tutto-quello-che-sappiamo"
+  },
+  {
+   "keyword": "eternals",
+   "pos": 4,
+   "traffico": 518,
+   "ultimi3": 0.0,
+   "slug": "eternals-la-bellezza-della-diversita-nel-film-della-marvel"
+  },
+  {
+   "keyword": "the one film",
+   "pos": 1,
+   "traffico": 396,
+   "ultimi3": 0.45161290322580644,
+   "slug": "the-one-la-storia-vera-dellunica-superstite-dellaeroflot-flight-811"
+  },
+  {
+   "keyword": "i signori del gioco",
+   "pos": 4,
+   "traffico": 290,
+   "ultimi3": 0.34234234234234234,
+   "slug": "i-signori-del-gioco-su-netflix-trama-cast-trailer-e-curiosita"
+  },
+  {
+   "keyword": "film di margot robbie",
+   "pos": 6,
+   "traffico": 237,
+   "ultimi3": 0.36363636363636365,
+   "slug": "margot-robbie-e-colin-farrell-sony-mostra-in-anteprima-a-big-bold-beautiful-journey"
+  },
+  {
+   "keyword": "incastrati",
+   "pos": 4,
+   "traffico": 237,
+   "ultimi3": 0.41025641025641024,
+   "slug": "incastrati-2-netflix-annuncia-la-seconda-stagione-della-serie-di-successo-di-ficarra-e-picone"
+  },
+  {
+   "keyword": "fast and furious 8",
+   "pos": 7,
+   "traffico": 217,
+   "ultimi3": 0.44155844155844154,
+   "slug": "fast-furious-8"
+  },
+  {
+   "keyword": "dept q",
+   "pos": 9,
+   "traffico": 188,
+   "ultimi3": 0.35820895522388063,
+   "slug": "netflix-rinnova-dept-q-per-una-seconda-stagione"
+  }
+ ]
+}

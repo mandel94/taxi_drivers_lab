@@ -43,6 +43,8 @@ models:
           arguments:
             combination_of_columns: [article_id, date_day]
     columns:
+      - name: published_date
+        description: "Data di pubblicazione dell'articolo, nel fuso di Roma (stessa convenzione di dim_article)."
       - name: age_bucket
         description: "Fascia di eta' dell'articolo alla data della metrica: 0-7, 8-30, 31-90, 91-365, 366+."
         data_tests:
