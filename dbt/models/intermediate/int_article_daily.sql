@@ -9,6 +9,7 @@ select
     g.article_id,
     a.title,
     a.link,
+    a.published_date,
     a.primary_section_key                                              as section_key,
     s.section_name,
     greatest(0, g.date_day - a.published_date)                         as age_days,

@@ -12,3 +12,5 @@ dbt/dbt_packages/
 dbt/logs/
 node_modules/
 .ipynb_checkpoints/
+
+exports/

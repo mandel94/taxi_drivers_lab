@@ -6,6 +6,7 @@ select
     article_id,
     title,
     link,
+    published_date,
     section_key,
     section_name,
     age_days,
