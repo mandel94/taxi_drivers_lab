@@ -1,0 +1,63 @@
+# Formule da non usare: tic tipici dei testi generati e frasi fatte che nei
+# tuoi articoli non compaiono mai. `metrics build` controlla che nessun
+# pattern ricorra nel tuo corpus: se compare, non e' un tic ma un tuo tratto
+# e va tolto da qui. `metrics check` segnala ogni occorrenza nel testo.
+# Pattern: espressioni regolari, senza distinzione tra maiuscole e minuscole.
+# livello: "vietato" (mai nei tuoi testi, default) oppure "raro" (lo usi una
+# o due volte nel corpo degli articoli, mai in intro, elenco o sguardo:
+# in un testo generato va evitato, una ripetizione e' gia' un tic).
+
+divieti:
+  - pattern: "\\bin un mondo in cui\\b"
+    motivo: apertura generica da testo generato
+  - pattern: "\\bnon (si tratta|è) (solo|soltanto|semplicemente) d?i? ?\\w+[^.]{0,40}(,|:|;) (ma|è)\\b"
+    motivo: struttura "non è solo X, è Y" ripetuta dai modelli
+    livello: raro
+  - pattern: "\\bnon è un caso che\\b"
+    motivo: frase fatta
+    livello: raro
+  - pattern: "\\bvale la pena\\b"
+    motivo: frase fatta
+  - pattern: "\\bsenza (alcun )?dubbio\\b"
+    motivo: rafforzativo vuoto
+  - pattern: "\\b(in conclusione|in definitiva|in sintesi|insomma|per concludere)\\b"
+    motivo: lo sguardo d'insieme non annuncia la chiusura, la fa
+  - pattern: "\\bè importante (notare|sottolineare|ricordare)\\b"
+    motivo: metadiscorso da testo generato
+  - pattern: "\\bsottolinea l'importanza\\b"
+    motivo: formula astratta
+  - pattern: "\\b(immergersi|immergiti|immergetevi|ci immerge|vi immergerete)\\b"
+    motivo: metafora abusata dai modelli
+  - pattern: "\\b(un viaggio|viaggio) (emozionante|indimenticabile|affascinante)\\b"
+    motivo: cliché
+  - pattern: "\\b(affascinante|avvincente|coinvolgente|emozionante)\\b"
+    motivo: aggettivo di giudizio generico; meglio dire cosa fa il film
+    livello: raro
+  - pattern: "\\b(sfumature|arazzo|mosaico di|sinfonia di|danza tra)\\b"
+    motivo: immagini decorative tipiche dei modelli
+    livello: raro
+  - pattern: "\\bda non perdere\\b"
+    motivo: formula promozionale
+  - pattern: "\\bun must\\b"
+    motivo: registro pubblicitario
+  - pattern: "\\bma non è tutto\\b"
+    motivo: transizione da testo generato
+  - pattern: "\\bil risultato\\?"
+    motivo: domanda retorica seguita dalla risposta, tic da modello
+  - pattern: "\\b(testimonianza|testimonia) (di|della|del|dello|dell')\\b"
+    motivo: formula astratta
+  - pattern: "\\bsi inserisce (perfettamente )?(in|nel|nella|nel solco)\\b"
+    motivo: formula da comunicato
+    livello: raro
+  - pattern: "\\b(lascia|lasciano) il segno\\b"
+    motivo: cliché
+  - pattern: "\\bpanorama (cinematografico|audiovisivo) (attuale|contemporaneo)\\b"
+    motivo: sintagma vuoto
+  - pattern: "\\bin un'epoca (dominata|segnata) da\\b"
+    motivo: apertura generica
+  - pattern: "\\b(cari lettori|care lettrici)\\b"
+    motivo: il pubblico si chiama in causa con il "voi" della formula iniziale, non con un vocativo
+  - pattern: "\\b(esplora|esplorano|esplorare) (temi|tematiche)\\b"
+    motivo: formula astratta; dire quale tema e come
+  - pattern: "\\btematiche (profonde|importanti|attuali)\\b"
+    motivo: sintagma vuoto

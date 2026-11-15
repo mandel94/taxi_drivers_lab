@@ -1,0 +1,167 @@
+# Generato da: python -m nlp.style_profile.titles build. Non modificare a mano.
+versione: titoli-v1
+corpus:
+  autore: Manuel De Luzi
+  da: '2026-07-22'
+  hold_out:
+  - 552807
+  - 561483
+  - 565041
+  n_altri_titoletti: 1449
+titoli:
+  n_titoli: 55
+  numeriche:
+    parole:
+      min: 2.0
+      p10: 5.0
+      mediana: 7.0
+      p90: 9.0
+      max: 12.0
+    ancora_parole:
+      min: 0.0
+      p10: 1.0
+      mediana: 2.0
+      p90: 4.0
+      max: 6.0
+    lettura_parole:
+      min: 0.0
+      p10: 2.0
+      mediana: 5.0
+      p90: 7.0
+      max: 9.0
+    caratteri_per_parola:
+      min: 3.0
+      p10: 4.209
+      mediana: 5.111
+      p90: 6.339
+      max: 7.5
+    maiuscole_interne:
+      min: 0.0
+      p10: 0.0
+      mediana: 0.0
+      p90: 0.0
+      max: 0.0
+  binarie:
+    ancora_in_corsivo: 0.2364
+    ha_corsivo: 0.2545
+    ha_tra: 0.1273
+    ha_verbo_finito: 0.3636
+    inizia_articolo: 0.2545
+    due_punti: 0.0182
+    parentesi: 0.0
+    virgolette: 0.0545
+    numeri: 0.0364
+    puntini: 0.0364
+    opera_verbo_azione: 0.0364
+  categoriche:
+    struttura:
+      ancora_lettura:
+        n: 39
+        quota: 0.7091
+      frase:
+        n: 12
+        quota: 0.2182
+      sintagma:
+        n: 3
+        quota: 0.0545
+      solo_titolo:
+        n: 1
+        quota: 0.0182
+    ancora_tipo:
+      nome:
+        n: 25
+        quota: 0.4545
+      categoria:
+        n: 13
+        quota: 0.2364
+      evento:
+        n: 10
+        quota: 0.1818
+      piattaforma:
+        n: 3
+        quota: 0.0545
+      altro:
+        n: 2
+        quota: 0.0364
+      assente:
+        n: 2
+        quota: 0.0364
+    lettura_tipo:
+      assente:
+        n: 16
+        quota: 0.2909
+      sintagma:
+        n: 13
+        quota: 0.2364
+      preposizione:
+        n: 11
+        quota: 0.2
+      clausola:
+        n: 9
+        quota: 0.1636
+      per_infinito:
+        n: 2
+        quota: 0.0364
+      congiunzione:
+        n: 2
+        quota: 0.0364
+      infinito:
+        n: 2
+        quota: 0.0364
+    finale:
+      nessuno:
+        n: 53
+        quota: 0.9636
+      …:
+        n: 1
+        quota: 0.0182
+      '?':
+        n: 1
+        quota: 0.0182
+formato_attuale:
+  da: '2026-09-26'
+  n_articoli: 5
+  n_titoli: 23
+  titoli_per_articolo:
+  - 4
+  - 4
+  - 5
+  - 5
+  - 5
+  quota_ancora_nome_per_articolo:
+    min: 0.5
+    max: 1.0
+  quota_ancora_lettura_per_articolo:
+    min: 0.25
+    max: 0.8
+  ancora_nome_in_corsivo: 0.588
+  categoriche:
+    struttura:
+      ancora_lettura: 0.652
+      frase: 0.304
+      solo_titolo: 0.043
+    ancora_tipo:
+      nome: 0.739
+      evento: 0.174
+      piattaforma: 0.043
+      assente: 0.043
+    lettura_tipo:
+      assente: 0.348
+      sintagma: 0.348
+      clausola: 0.13
+      preposizione: 0.087
+      infinito: 0.087
+discriminazione:
+  auc_loo: 0.913
+  autore:
+    p10: 1.093
+    mediana: 3.386
+    p90: 6.628
+    min: -9.126
+    max: 8.702
+  altri:
+    p10: -9.077
+    mediana: -6.614
+    p90: 1.996
+    min: -10.928
+    max: 6.134

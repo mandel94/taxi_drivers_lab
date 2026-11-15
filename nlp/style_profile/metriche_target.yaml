@@ -1,0 +1,647 @@
+# Generato da: python -m nlp.style_profile.metrics build. Non modificare a mano.
+versione: stile-v1
+corpus:
+  autore: Manuel De Luzi
+  hold_out:
+  - 552807
+  - 561483
+  - 565041
+  nota: Intervalli dalle sezioni di addestramento. Con meno di 8 sezioni si usa [min,
+    max], altrimenti [p10, p90].
+sezioni:
+  corpo:
+    n_sezioni: 60
+    metriche:
+      parole:
+        min: 61.0
+        p10: 113.4
+        mediana: 158.0
+        p90: 236.1
+        max: 268.0
+      frasi:
+        min: 2.0
+        p10: 5.0
+        mediana: 7.0
+        p90: 10.0
+        max: 18.0
+      paragrafi:
+        min: 1.0
+        p10: 2.0
+        mediana: 3.0
+        p90: 5.0
+        max: 6.0
+      parole_per_frase:
+        min: 14.0556
+        p10: 18.4654
+        mediana: 23.5778
+        p90: 31.755
+        max: 37.6
+      parole_per_frase_sd:
+        min: 2.9257
+        p10: 6.4894
+        mediana: 9.6834
+        p90: 17.2759
+        max: 23.9616
+      parole_per_frase_max:
+        min: 25.0
+        p10: 30.0
+        mediana: 38.0
+        p90: 58.2
+        max: 74.0
+      quota_frasi_brevi:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.1429
+        p90: 0.4
+        max: 0.5556
+      quota_frasi_lunghe:
+        min: 0.0
+        p10: 0.0748
+        mediana: 0.2857
+        p90: 0.5056
+        max: 0.8
+      parole_per_paragrafo:
+        min: 31.4
+        p10: 38.0
+        mediana: 50.875
+        p90: 67.0
+        max: 79.0
+      virgole_x1000:
+        min: 28.5714
+        p10: 39.6669
+        mediana: 57.1268
+        p90: 85.45
+        max: 113.9241
+      punto_e_virgola_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 5.0505
+      due_punti_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 6.3097
+        p90: 17.63
+        max: 23.622
+      trattini_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 11.2739
+        max: 24.5399
+      parentesi_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 15.7916
+        max: 23.8095
+      virgolette_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 12.3088
+        max: 21.2766
+      domande_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.3953
+        max: 9.434
+      quota_soggetto_preverbale:
+        min: 0.1667
+        p10: 0.33
+        mediana: 0.5
+        p90: 0.8
+        max: 1.0
+      quota_attacco_connettivo:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0385
+        p90: 0.225
+        max: 0.5
+      prima_plurale_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 2.1097
+        p90: 12.5658
+        max: 17.4672
+      seconda_plurale_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 6.1457
+        max: 18.018
+      mattr:
+        min: 0.8409
+        p10: 0.8553
+        mediana: 0.8876
+        p90: 0.9076
+        max: 0.9434
+      lunghezza_parola:
+        min: 4.8444
+        p10: 4.9388
+        mediana: 5.1829
+        p90: 5.5283
+        max: 5.8728
+      quota_aggettivi:
+        min: 0.0328
+        p10: 0.071
+        mediana: 0.0952
+        p90: 0.1172
+        max: 0.1503
+      quota_nomi:
+        min: 0.1771
+        p10: 0.2053
+        mediana: 0.2373
+        p90: 0.2662
+        max: 0.3103
+      quota_verbi:
+        min: 0.0613
+        p10: 0.0851
+        mediana: 0.1045
+        p90: 0.127
+        max: 0.1475
+      corsivi_x100:
+        min: 0.0
+        p10: 0.7457
+        mediana: 1.8928
+        p90: 3.4278
+        max: 9.1667
+  intro:
+    n_sezioni: 13
+    metriche:
+      parole:
+        min: 91.0
+        p10: 93.6
+        mediana: 100.0
+        p90: 121.6
+        max: 124.0
+      frasi:
+        min: 3.0
+        p10: 4.0
+        mediana: 5.0
+        p90: 5.0
+        max: 6.0
+      paragrafi:
+        min: 2.0
+        p10: 2.0
+        mediana: 2.0
+        p90: 3.0
+        max: 3.0
+      parole_per_frase:
+        min: 18.6
+        p10: 19.36
+        mediana: 22.6
+        p90: 27.72
+        max: 30.3333
+      parole_per_frase_sd:
+        min: 3.5355
+        p10: 3.9764
+        mediana: 5.7927
+        p90: 8.6966
+        max: 9.8184
+      parole_per_frase_max:
+        min: 25.0
+        p10: 26.2
+        mediana: 31.0
+        p90: 37.0
+        max: 38.0
+      quota_frasi_brevi:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.2
+        max: 0.4
+      quota_frasi_lunghe:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.2
+        p90: 0.3167
+        max: 0.5
+      parole_per_paragrafo:
+        min: 31.0
+        p10: 37.7333
+        mediana: 48.0
+        p90: 60.8
+        max: 62.0
+      virgole_x1000:
+        min: 20.0
+        p10: 40.0645
+        mediana: 52.0833
+        p90: 63.8761
+        max: 65.9341
+      punto_e_virgola_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 8.6925
+        max: 30.0
+      due_punti_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 10.4167
+        max: 10.7527
+      trattini_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      parentesi_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      virgolette_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 8.7719
+      domande_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 8.0645
+      quota_soggetto_preverbale:
+        min: 0.2
+        p10: 0.25
+        mediana: 0.6
+        p90: 0.8
+        max: 0.8
+      quota_attacco_connettivo:
+        min: 0.1667
+        p10: 0.24
+        mediana: 0.5
+        p90: 0.7333
+        max: 0.75
+      prima_plurale_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 10.0
+        p90: 22.9605
+        max: 40.0
+      seconda_plurale_x1000:
+        min: 8.0645
+        p10: 8.2282
+        mediana: 10.0
+        p90: 10.6855
+        max: 10.989
+      mattr:
+        min: 0.8259
+        p10: 0.8515
+        mediana: 0.8932
+        p90: 0.9289
+        max: 0.9452
+      lunghezza_parola:
+        min: 4.6042
+        p10: 4.8237
+        mediana: 5.129
+        p90: 5.4037
+        max: 5.5
+      quota_aggettivi:
+        min: 0.0312
+        p10: 0.0543
+        mediana: 0.0813
+        p90: 0.099
+        max: 0.114
+      quota_nomi:
+        min: 0.211
+        p10: 0.2137
+        mediana: 0.23
+        p90: 0.2809
+        max: 0.3187
+      quota_verbi:
+        min: 0.0796
+        p10: 0.0807
+        mediana: 0.0976
+        p90: 0.14
+        max: 0.156
+      corsivi_x100:
+        min: 0.0
+        p10: 0.0
+        mediana: 1.0989
+        p90: 3.2266
+        max: 3.5398
+  prima_di_lasciarci:
+    n_sezioni: 4
+    metriche:
+      parole:
+        min: 38.0
+        p10: 39.5
+        mediana: 48.0
+        p90: 69.8
+        max: 77.0
+      frasi:
+        min: 5.0
+        p10: 5.3
+        mediana: 6.0
+        p90: 6.7
+        max: 7.0
+      paragrafi:
+        min: 5.0
+        p10: 5.0
+        mediana: 5.0
+        p90: 5.7
+        max: 6.0
+      parole_per_frase:
+        min: 6.3333
+        p10: 6.7048
+        mediana: 8.0857
+        p90: 11.5633
+        max: 12.8333
+      parole_per_frase_sd:
+        min: 1.5986
+        p10: 2.0521
+        mediana: 3.3327
+        p90: 4.4338
+        max: 4.8103
+      parole_per_frase_max:
+        min: 9.0
+        p10: 9.9
+        mediana: 13.0
+        p90: 18.2
+        max: 20.0
+      quota_frasi_brevi:
+        min: 0.5
+        p10: 0.59
+        mediana: 0.9
+        p90: 1.0
+        max: 1.0
+      quota_frasi_lunghe:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      parole_per_paragrafo:
+        min: 7.6
+        p10: 7.9
+        mediana: 8.7167
+        p90: 13.43
+        max: 15.4
+      virgole_x1000:
+        min: 12.987
+        p10: 32.7751
+        mediana: 86.6435
+        p90: 109.6972
+        max: 116.2791
+      punto_e_virgola_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      due_punti_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 11.6279
+        p90: 25.3978
+        max: 26.3158
+      trattini_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      parentesi_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      virgolette_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 28.3019
+        p90: 65.8183
+        max: 69.7674
+      domande_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 9.434
+        p90: 24.0814
+        max: 26.3158
+      quota_soggetto_preverbale:
+        min: 0.0
+        p10: 0.05
+        mediana: 0.2976
+        p90: 0.4786
+        max: 0.5
+      quota_attacco_connettivo:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      prima_plurale_x1000:
+        min: 0.0
+        p10: 5.6604
+        mediana: 28.9145
+        p90: 48.5304
+        max: 52.6316
+      seconda_plurale_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 6.4935
+        p90: 22.3172
+        max: 26.3158
+      mattr:
+        min: 0.8684
+        p10: 0.8706
+        mediana: 0.8979
+        p90: 0.9597
+        max: 0.9767
+      lunghezza_parola:
+        min: 4.8684
+        p10: 4.9079
+        mediana: 5.0377
+        p90: 5.8529
+        max: 6.186
+      quota_aggettivi:
+        min: 0.0189
+        p10: 0.0211
+        mediana: 0.0391
+        p90: 0.0807
+        max: 0.093
+      quota_nomi:
+        min: 0.1132
+        p10: 0.1299
+        mediana: 0.1897
+        p90: 0.2422
+        max: 0.2558
+      quota_verbi:
+        min: 0.0698
+        p10: 0.0804
+        mediana: 0.1092
+        p90: 0.1158
+        max: 0.1169
+      corsivi_x100:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 1.8182
+        max: 2.5974
+  sguardo:
+    n_sezioni: 13
+    metriche:
+      parole:
+        min: 63.0
+        p10: 70.0
+        mediana: 82.0
+        p90: 125.2
+        max: 137.0
+      frasi:
+        min: 2.0
+        p10: 3.0
+        mediana: 3.0
+        p90: 4.8
+        max: 5.0
+      paragrafi:
+        min: 1.0
+        p10: 1.0
+        mediana: 1.0
+        p90: 1.0
+        max: 3.0
+      parole_per_frase:
+        min: 20.75
+        p10: 20.76
+        mediana: 24.6667
+        p90: 37.65
+        max: 42.0
+      parole_per_frase_sd:
+        min: 3.0912
+        p10: 3.7758
+        mediana: 6.0982
+        p90: 11.4659
+        max: 30.6268
+      parole_per_frase_max:
+        min: 29.0
+        p10: 29.2
+        mediana: 32.0
+        p90: 45.6
+        max: 85.0
+      quota_frasi_brevi:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.24
+        max: 0.3333
+      quota_frasi_lunghe:
+        min: 0.0
+        p10: 0.04
+        mediana: 0.3333
+        p90: 0.68
+        max: 1.0
+      parole_per_paragrafo:
+        min: 27.6667
+        p10: 64.2
+        mediana: 80.0
+        p90: 125.2
+        max: 137.0
+      virgole_x1000:
+        min: 13.5135
+        p10: 36.8894
+        mediana: 48.1928
+        p90: 71.0646
+        max: 79.3651
+      punto_e_virgola_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 8.1967
+      due_punti_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 12.0482
+        max: 19.2308
+      trattini_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 5.8394
+        max: 27.027
+      parentesi_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 6.3492
+        max: 12.987
+      virgolette_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 7.2993
+      domande_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      quota_soggetto_preverbale:
+        min: 0.3333
+        p10: 0.3467
+        mediana: 0.75
+        p90: 1.0
+        max: 1.0
+      quota_attacco_connettivo:
+        min: 0.25
+        p10: 0.2667
+        mediana: 0.4
+        p90: 0.6667
+        max: 0.75
+      prima_plurale_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 14.1788
+        max: 40.5405
+      seconda_plurale_x1000:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 0.0
+        max: 0.0
+      mattr:
+        min: 0.824
+        p10: 0.8416
+        mediana: 0.8691
+        p90: 0.8894
+        max: 0.9245
+      lunghezza_parola:
+        min: 4.8193
+        p10: 4.9661
+        mediana: 5.25
+        p90: 5.9285
+        max: 6.0625
+      quota_aggettivi:
+        min: 0.0317
+        p10: 0.037
+        mediana: 0.0811
+        p90: 0.1297
+        max: 0.1566
+      quota_nomi:
+        min: 0.2169
+        p10: 0.2303
+        mediana: 0.2727
+        p90: 0.3302
+        max: 0.3478
+      quota_verbi:
+        min: 0.0738
+        p10: 0.0967
+        mediana: 0.1241
+        p90: 0.159
+        max: 0.1807
+      corsivi_x100:
+        min: 0.0
+        p10: 0.0
+        mediana: 0.0
+        p90: 2.4918
+        max: 3.6145
