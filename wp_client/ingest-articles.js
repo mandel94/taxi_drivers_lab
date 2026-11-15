@@ -31,6 +31,12 @@
 const { Pool } = require('pg');
 const { getSite } = require('./wp-client');
 const { getCategories } = require('./posts-service');
+const {
+  validateWpCategories,
+  planCategoryReconcile,
+  applyRenames,
+  applyRepoints,
+} = require('./category-reconcile');
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
@@ -211,9 +217,22 @@ function extractAuthorName(post) {
  *   2) UPDATE che valorizza parent_id, quando ogni riga esiste già
  * Così il vincolo di integrità referenziale è sempre soddisfatto,
  * indipendentemente dall'ordine restituito dall'API.
+ *
+ * Riconciliazione (category-reconcile.js): categories_dim ha UNIQUE(slug),
+ * quindi una categoria che in WordPress cambia id tenendo lo slug farebbe
+ * fallire l'INSERT. Prima si valida l'elenco WP (nessuna scrittura se non
+ * valido); poi, in un'unica transazione, si liberano gli slug in conflitto,
+ * si fanno le due passate e si ripuntano articoli e figli sull'id nuovo.
  */
 async function upsertCategories(client) {
   const categories = await getCategories();
+
+  const validation = validateWpCategories(categories);
+  if (!validation.valid) {
+    throw new Error(
+      'Categorie WordPress non valide, import interrotto: ' + validation.problems.join('; ')
+    );
+  }
 
   const insertQuery = `
     INSERT INTO categories_dim (category_id, parent_id, name, slug, description, wp_taxonomy, updated_at)
@@ -225,21 +244,49 @@ async function upsertCategories(client) {
       updated_at = now();
   `;
 
-  // Prima passata: tutte le categorie esistono come riga, senza parent_id.
-  for (const cat of categories) {
-    await client.query(insertQuery, [cat.id, cat.name, cat.slug, cat.description || null]);
-  }
-
-  // Seconda passata: ora che ogni riga esiste, valorizza il parent_id.
-  // NULLIF(parent, 0) perché WP usa 0 per "nessun genitore", non NULL.
   const updateParentQuery = `
     UPDATE categories_dim SET parent_id = NULLIF($2, 0) WHERE category_id = $1;
   `;
-  for (const cat of categories) {
-    await client.query(updateParentQuery, [cat.id, cat.parent || 0]);
+
+  let plan;
+  await client.query('BEGIN');
+  try {
+    const { rows } = await client.query('SELECT category_id, slug FROM categories_dim');
+    plan = planCategoryReconcile(categories, rows);
+    await applyRenames(client, plan);
+
+    // Prima passata: tutte le categorie esistono come riga, senza parent_id.
+    for (const cat of categories) {
+      await client.query(insertQuery, [cat.id, cat.name, cat.slug, cat.description || null]);
+    }
+
+    // Seconda passata: ora che ogni riga esiste, valorizza il parent_id.
+    // NULLIF(parent, 0) perché WP usa 0 per "nessun genitore", non NULL.
+    for (const cat of categories) {
+      await client.query(updateParentQuery, [cat.id, cat.parent || 0]);
+    }
+
+    await applyRepoints(client, plan);
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
   }
 
   console.log(`categories_dim: ${categories.length} categorie sincronizzate.`);
+  if (plan.replacements.length > 0) {
+    const dettaglio = plan.replacements
+      .map((r) => `${r.slug} ${r.oldId}->${r.newId}`)
+      .join(', ');
+    console.log(
+      `categories_dim: ${plan.replacements.length} categorie con id cambiato in WordPress (stesso slug) riconciliate: ${dettaglio}.`
+    );
+  }
+  if (plan.orphans.length > 0) {
+    console.log(
+      `categories_dim: ${plan.orphans.length} categorie non piu' presenti in WordPress, lasciate in tabella.`
+    );
+  }
   return categories.length;
 }
 
