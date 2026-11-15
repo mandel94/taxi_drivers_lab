@@ -40,6 +40,11 @@ LOG="logs/refresh_$(date +%F).log"
     rc=3
   fi
   echo "===== $(date '+%F %T') fine refresh (exit $rc) ====="
+  # Backup del database dopo il refresh (anche se il refresh e' fallito: i dati caricati vanno
+  # comunque messi al sicuro). Un backup fallito rende non zero il codice di uscita.
+  if docker info >/dev/null 2>&1; then
+    bash scripts/backup_db.sh || { [ "$rc" -eq 0 ] && rc=4; }
+  fi
 } >> "$LOG" 2>&1
 
 # Conserva 30 giorni di log.

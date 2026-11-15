@@ -12,3 +12,5 @@ spacy>=3.7.0,<4.0.0
 dbt-core==1.12.6
 dbt-postgres==1.10.2
 openpyxl>=3.1,<4.0
+# Google Trends NON ufficiale (scripts/signal_sources.py): libreria archiviata, puo' smettere di funzionare.
+pytrends>=4.9,<5.0

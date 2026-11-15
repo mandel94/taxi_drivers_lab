@@ -15,6 +15,8 @@ Ogni giorno alle **07:30** Windows lancia `scripts\run_refresh.cmd`, che apre MS
 
 Un passo che fallisce non ferma gli altri. Se qualcosa è fallito il codice di uscita finale è diverso da zero.
 
+Alla fine, `run_refresh.sh` fa il **backup del database** (`scripts/backup_db.sh`): dettagli, cartella e ripristino in [infrastruttura_dati.md](infrastruttura_dati.md#10-bis-backup-e-ripristino). Un backup fallito dà codice di uscita 4.
+
 ## Backfill dinamico: perché non si perde nulla
 
 Le ingestioni GA4 non fidano di "ieri": a ogni esecuzione guardano cosa c'è davvero nelle tabelle.

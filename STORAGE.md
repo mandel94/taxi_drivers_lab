@@ -43,7 +43,7 @@ taxi_drivers_lab/
    docker compose up -d
    ```
 
-   Postgres resta in ascolto su `localhost:${POSTGRES_PORT}` (default `5434`).
+   Postgres resta in ascolto su `localhost:${POSTGRES_PORT}` (default `5437`).
    Verifica che sia pronto:
 
    ```powershell

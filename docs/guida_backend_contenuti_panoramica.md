@@ -165,7 +165,7 @@ dbt/
 └── tests/
 ```
 
-3. `profiles.yml`: host `localhost`, porta da `env_var('POSTGRES_PORT')` (nel compose è 5434), utente, password e database sempre da `env_var(...)`. Mai password in chiaro nel file.
+3. `profiles.yml`: host `localhost`, porta da `env_var('POSTGRES_PORT')` (nel compose è 5437), utente, password e database sempre da `env_var(...)`. Mai password in chiaro nel file.
 4. In `dbt_project.yml` configura le materializzazioni: `staging` e `intermediate` come `view`, `marts` come `table`, con `+schema` uguale al nome della cartella. Aggiungi `vars: { date_start: '2025-01-01' }` (usa la data del passo 1).
 5. Crea la macro che serve a evitare gli schemi `public_staging`:
 

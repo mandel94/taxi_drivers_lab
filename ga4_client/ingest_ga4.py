@@ -17,7 +17,7 @@ un errore su un giorno non compromette i giorni gia' committati.
 
 Uso:
     export GA4_PROPERTY_ID=123456789
-    export DATABASE_URL=postgresql://user:pass@localhost:5434/taxidrivers
+    export DATABASE_URL=postgresql://user:pass@localhost:5437/taxidrivers
 
     python ingest_ga4.py                         # ultimi 30 giorni (default)
     python ingest_ga4.py --days 7                # ultimi 7 giorni

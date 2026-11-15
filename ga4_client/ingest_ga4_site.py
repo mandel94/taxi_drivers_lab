@@ -25,7 +25,7 @@ backfill: cambiarla dopo spezzerebbe lo storico).
 
 Uso:
     export GA4_PROPERTY_ID=123456789
-    export DATABASE_URL=postgresql://user:pass@localhost:5434/taxidrivers
+    export DATABASE_URL=postgresql://user:pass@localhost:5437/taxidrivers
 
     python ingest_ga4_site.py                          # ultimi 3 giorni (default)
     python ingest_ga4_site.py --days 7

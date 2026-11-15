@@ -25,7 +25,7 @@ e' nel log e l'exit code e' 1.
 
 Uso (dalla cartella ga4_client, come i job GA4 del Makefile):
     export GA4_PROPERTY_ID=394327334
-    export DATABASE_URL=postgresql://user:pass@localhost:5434/taxidrivers
+    export DATABASE_URL=postgresql://user:pass@localhost:5437/taxidrivers
     python article_score_job.py --auto --floor 2026-08-16
 """
 

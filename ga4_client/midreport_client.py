@@ -9,8 +9,9 @@ Per l'intervallo:
   2. pagePath -> article_id con la regola di fact_ga4_daily; le pagine non articolo
      vengono scartate;
   3. aggrega per articolo e calcola score ed editorial_rank (article_scoring.py);
-  4. prende i primi N per editorial_rank e legge da articles_dim titolo, autore e
-     data di pubblicazione;
+  4. legge da articles_dim titolo, autore e data di pubblicazione, scarta gli
+     articoli esclusi per scelta editoriale (EXCLUDED_TITLE_PATTERNS) e prende i
+     primi N per editorial_rank;
   5. categoria: dal percorso GA4 della pagina piu' vista dell'articolo, come nel
      report settimanale (category_mapping.py).
 
@@ -20,7 +21,7 @@ non e' confrontabile con quello delle settimane complete in fact_article_score_p
 
 Uso (dalla cartella ga4_client):
     export GA4_PROPERTY_ID=394327334
-    export DATABASE_URL=postgresql://user:pass@localhost:5434/taxidrivers
+    export DATABASE_URL=postgresql://user:pass@localhost:5437/taxidrivers
     python midreport_client.py --days 3                       # ultimi 3 giorni, oggi incluso
     python midreport_client.py --start 2026-10-26 --end 2026-10-28 --top 100
 """
@@ -64,6 +65,19 @@ HEADERS = [
 ]
 
 
+# Articoli mai inclusi nella top: scelta editoriale, applicata dopo lo score
+# (il calcolo dei percentili resta sul set completo, come nel report settimanale).
+EXCLUDED_TITLE_PATTERNS = [
+    r"5 attrici famose che facevano le pornostar",
+    r"streaming.*(gratis|gratuit)|(gratis|gratuit).*streaming",
+]
+_EXCLUDED_TITLE_RE = re.compile("|".join(f"(?:{p})" for p in EXCLUDED_TITLE_PATTERNS), re.IGNORECASE)
+
+
+def is_excluded_title(title) -> bool:
+    return isinstance(title, str) and bool(_EXCLUDED_TITLE_RE.search(html.unescape(title)))
+
+
 def dominant_category(pages: pd.DataFrame) -> pd.DataFrame:
     """Per articolo, la categoria del percorso con piu' activeUsers."""
     ranked = pages.assign(activeUsers=pd.to_numeric(pages["activeUsers"], errors="coerce").fillna(0))
@@ -91,11 +105,11 @@ def build_top(conn, client, property_id: str, start: dt.date, end: dt.date, top:
         return pd.DataFrame(columns=HEADERS)
 
     categories = dominant_category(matched)
-    scored = score_articles(combine_pages_by_article(matched))
-    scored = scored.sort_values("editorial_rank").head(top)
+    scored = score_articles(combine_pages_by_article(matched)).sort_values("editorial_rank")
 
     details = article_details(conn, scored["article_id"].tolist())
     merged = scored.merge(details, on="article_id", how="left").merge(categories, on="article_id", how="left")
+    merged = merged[~merged["title"].map(is_excluded_title)].head(top)
 
     out = pd.DataFrame(
         {

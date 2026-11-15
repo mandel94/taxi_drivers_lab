@@ -23,7 +23,7 @@ endif
 
 POSTGRES_USER ?= postgres
 POSTGRES_DB ?= taxidrivers
-POSTGRES_PORT ?= 5432
+POSTGRES_PORT ?= 5437
 DATABASE_URL ?= postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:$(POSTGRES_PORT)/$(POSTGRES_DB)
 
 # Immagine tbls e cartella di output della documentazione del DB.
