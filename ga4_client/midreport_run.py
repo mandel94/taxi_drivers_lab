@@ -63,8 +63,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--start", type=dt.date.fromisoformat, required=True, help="inizio (YYYY-MM-DD)")
     parser.add_argument("--end", type=dt.date.fromisoformat, required=True, help="fine (YYYY-MM-DD)")
     parser.add_argument("--out", type=Path, help="cartella di output (default output/midreport_workflow/<start>_<end>)")
+    parser.add_argument("--exclude", default="",
+                        help="giorni da escludere, separati da virgola (YYYY-MM-DD), es. per il blocco del sito")
+    parser.add_argument("--drop-suspect", action="store_true",
+                        help="toglie il traffico sospetto (engagement < 5%%, durata < 3 s, almeno 20 utenti attivi)")
     args = parser.parse_args(argv)
     start, end = args.start, args.end
+    exclude = [dt.date.fromisoformat(x) for x in args.exclude.split(",") if x.strip()]
     out = args.out or ROOT / "output" / "midreport_workflow" / f"{start:%Y%m%d}_{end:%Y%m%d}"
 
     load_dotenv(ROOT / ".env")
@@ -77,9 +82,16 @@ def main(argv: list[str] | None = None) -> int:
 
     conn = psycopg2.connect(database_url())
     try:
-        df = build_top(conn, GA4Client(), property_id, start, end, top=100000, with_article_id=True)
+        df = build_top(conn, GA4Client(), property_id, start, end, top=100000, with_article_id=True,
+                       exclude=exclude)
     finally:
         conn.close()
+
+    n_suspect = 0
+    if args.drop_suspect:
+        n_all = len(df)
+        df = rep.drop_suspect(df)
+        n_suspect = n_all - len(df)
 
     out.mkdir(parents=True, exist_ok=True)
     week = start.isocalendar()[1]
@@ -91,14 +103,16 @@ def main(argv: list[str] | None = None) -> int:
     data = {
         "start": start.isoformat(),
         "end": end.isoformat(),
-        "subject": rep.subject(start, end),
-        "week_label": rep.week_label(start, end),
-        "reliability_warning": rep.reliability_warning(end),
+        "subject": rep.subject(start, end, exclude),
+        "week_label": rep.period_label(start, end, exclude),
+        "exclude": [d.isoformat() for d in exclude],
+        "reliability_warning": None if exclude else rep.reliability_warning(end),
         "category_stats": rep.category_stats(df),
         "sections": sections,
         "notes": rep.build_notes(df, sections),
         "top5_active_users": df.nlargest(5, "activeUsers").to_dict("records"),
         "n_articles": len(df),
+        "n_suspect_dropped": n_suspect,
     }
     with open(out / "dati.json", "w", encoding="utf-8", newline="\n") as f:
         json.dump(clean(data), f, ensure_ascii=False, indent=2)

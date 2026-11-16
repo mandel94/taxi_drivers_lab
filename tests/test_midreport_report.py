@@ -337,3 +337,57 @@ def test_write_kb_xlsx_headers_pagepath_order_exclusions(tmp_path):
     paths = [ws.cell(row=r, column=10).value for r in range(2, 5)]
     assert titles == ["Alto", "Medio", "Basso"]
     assert paths == ["/102/", "/104/", "/101/"]
+
+
+# --- giorni esclusi (settimana con blocco del sito) ---
+from midreport_report import date_ranges, period_label  # noqa: E402
+
+
+def test_date_ranges_skips_excluded_days():
+    ex = [dt.date(2026, 11, 10), dt.date(2026, 11, 11)]
+    assert date_ranges(dt.date(2026, 11, 9), dt.date(2026, 11, 15), ex) == [
+        (dt.date(2026, 11, 9), dt.date(2026, 11, 9)),
+        (dt.date(2026, 11, 12), dt.date(2026, 11, 15)),
+    ]
+
+
+def test_date_ranges_without_exclusions_is_one_range():
+    assert date_ranges(dt.date(2026, 11, 2), dt.date(2026, 11, 6)) == [
+        (dt.date(2026, 11, 2), dt.date(2026, 11, 6))]
+
+
+def test_period_label_with_exclusions():
+    ex = [dt.date(2026, 11, 10), dt.date(2026, 11, 11)]
+    assert period_label(dt.date(2026, 11, 9), dt.date(2026, 11, 15), ex) == "9 e 12-15 nov 2026"
+
+
+def test_period_label_without_exclusions_matches_week_label():
+    assert period_label(dt.date(2026, 11, 2), dt.date(2026, 11, 6)) == "2-6 nov 2026"
+
+
+def test_subject_with_exclusions():
+    ex = [dt.date(2026, 11, 10), dt.date(2026, 11, 11)]
+    assert subject(dt.date(2026, 11, 9), dt.date(2026, 11, 15), ex) == (
+        "TaxiDrivers Analytics: Midreport Settimana 46 (9 e 12-15 nov 2026)")
+
+
+def test_render_html_custom_span():
+    html = render_html(dt.date(2026, 11, 9), dt.date(2026, 11, 15), ["a"], {}, {}, "c",
+                       span="i giorni 9 e 12-15 nov")
+    assert "settimana 46 (i giorni 9 e 12-15 nov)" in html
+
+# --- traffico sospetto (bot) ---
+from midreport_report import drop_suspect  # noqa: E402
+
+
+def test_drop_suspect_removes_zero_engagement_high_users():
+    df = _df([
+        _row("Vero", "News", 60, 50, rate=0.5, dur=80),
+        _row("Bot", "News", 43, 160, rate=0.0, dur=0.0),
+        _row("Bot al limite", "News", 43, 20, rate=0.04, dur=2.9),
+        _row("Pochi utenti", "News", 43, 19, rate=0.0, dur=0.0),
+        _row("Engagement 5%", "News", 43, 80, rate=0.05, dur=0.0),
+        _row("Durata 3s", "News", 43, 80, rate=0.0, dur=3.0),
+    ])
+    out = drop_suspect(df)
+    assert list(out["title"]) == ["Vero", "Pochi utenti", "Engagement 5%", "Durata 3s"]

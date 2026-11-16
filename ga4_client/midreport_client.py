@@ -99,8 +99,15 @@ def article_details(conn, article_ids: list[int]) -> pd.DataFrame:
 
 
 def build_top(conn, client, property_id: str, start: dt.date, end: dt.date, top: int,
-              with_article_id: bool = False) -> pd.DataFrame:
-    pages = fetch_week_pages(client, property_id, start, end)
+              with_article_id: bool = False, exclude=()) -> pd.DataFrame:
+    if exclude:
+        # giorni esclusi (es. blocco del sito): un intervallo GA4 per ogni tratto contiguo.
+        # Gli utenti attivi di un articolo presente in piu' tratti si sommano (leggera sovrastima).
+        from midreport_report import date_ranges
+        parts = [fetch_week_pages(client, property_id, a, b) for a, b in date_ranges(start, end, exclude)]
+        pages = pd.concat(parts, ignore_index=True)
+    else:
+        pages = fetch_week_pages(client, property_id, start, end)
     matched = attach_article_ids(conn, pages)
     if matched.empty:
         return pd.DataFrame(columns=HEADERS + (["article_id"] if with_article_id else []))

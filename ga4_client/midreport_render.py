@@ -31,7 +31,7 @@ def main(argv: list[str] | None = None) -> int:
     end = dt.date.fromisoformat(data["end"])
 
     html = rep.render_html(start, end, red["sintesi"], data["sections"], data["notes"],
-                           red["chart_sentence"], red.get("contesto_note"))
+                           red["chart_sentence"], red.get("contesto_note"), span=red.get("span"))
     out = args.dir / f"midreport_settimana{start.isocalendar()[1]:02d}.html"
     with open(out, "w", encoding="utf-8", newline="\n") as f:
         f.write(html)

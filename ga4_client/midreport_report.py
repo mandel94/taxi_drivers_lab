@@ -40,9 +40,50 @@ def week_label(start, end) -> str:
             f"{end.day} {_MONTHS[end.month - 1]} {end.year}")
 
 
-def subject(start, end) -> str:
+def date_ranges(start, end, exclude=()):
+    """Intervalli contigui di giorni tra start e end, saltando i giorni esclusi."""
+    skip = set(exclude)
+    ranges, cur, day = [], None, start
+    while day <= end:
+        if day in skip:
+            if cur:
+                ranges.append(cur)
+            cur = None
+        else:
+            cur = (cur[0], day) if cur else (day, day)
+        day += dt.timedelta(days=1)
+    if cur:
+        ranges.append(cur)
+    return ranges
+
+
+def period_label(start, end, exclude=()) -> str:
+    if not exclude:
+        return week_label(start, end)
+    ranges = date_ranges(start, end, exclude)
+    multi_month = (start.year, start.month) != (end.year, end.month)
+    parts = []
+    for a, b in ranges:
+        txt = str(a.day) if a == b else f"{a.day}-{b.day}"
+        if multi_month:
+            txt += f" {_MONTHS[b.month - 1]}"
+        parts.append(txt)
+    label = " e ".join(parts)
+    if not multi_month:
+        label += f" {_MONTHS[end.month - 1]}"
+    return f"{label} {end.year}"
+
+
+def subject(start, end, exclude=()) -> str:
     return (f"TaxiDrivers Analytics: Midreport Settimana "
-            f"{start.isocalendar()[1]} ({week_label(start, end)})")
+            f"{start.isocalendar()[1]} ({period_label(start, end, exclude)})")
+
+
+def drop_suspect(df):
+    """Toglie il traffico sospetto: stessa regola della KB (engagement < 5%, durata < 3 s, almeno 20 utenti)."""
+    bot = ((df["engagementRate"] < 0.05) & (df["averageSessionDuration"] < 3)
+           & (df["activeUsers"] >= 20))
+    return df[~bot].reset_index(drop=True)
 
 
 def _valid(df):
@@ -103,10 +144,12 @@ def _esc(text) -> str:
     return _html.escape(str(text))
 
 
-def render_html(start, end, sintesi, sections, notes, chart_sentence, contesto_note=None):
+def render_html(start, end, sintesi, sections, notes, chart_sentence, contesto_note=None, span=None):
     contesto_note = contesto_note or {}
     p = '<p style="margin:0 0 12px 0;font-family:Arial,sans-serif;font-size:14px;">'
-    if (start.year, start.month) == (end.year, end.month):
+    if span:
+        pass
+    elif (start.year, start.month) == (end.year, end.month):
         span = f"dal {start.day} al {end.day} {_MONTHS[end.month - 1]}"
     else:
         span = (f"dal {start.day} {_MONTHS[start.month - 1]} "
