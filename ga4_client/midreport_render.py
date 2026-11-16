@@ -23,6 +23,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dir", type=Path, required=True, help="cartella con dati.json")
     parser.add_argument("--redazione", type=Path, required=True, help="JSON con sintesi, chart_sentence, contesto_note")
+    parser.add_argument("--no-check", action="store_true", help="salta il controllo di leggibilità dei testi")
     args = parser.parse_args(argv)
 
     data = json.loads((args.dir / "dati.json").read_text(encoding="utf-8"))
@@ -30,8 +31,34 @@ def main(argv: list[str] | None = None) -> int:
     start = dt.date.fromisoformat(data["start"])
     end = dt.date.fromisoformat(data["end"])
 
+    if not args.no_check:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        from nlp.leggibilita.lezioni import garantisci
+
+        # ogni testo passa dal ciclo di miglioramento (correzioni meccaniche) e dal registro delle lezioni
+        bad = False
+        for key in ("sintesi", "note_dati", "chart_sentence"):
+            values = red.get(key)
+            if not values:
+                continue
+            items = values if isinstance(values, list) else [values]
+            fixed = []
+            for t in items:
+                res = garantisci(t, origine="midreport")
+                fixed.append(res["testo"])
+                if not res["ok"]:
+                    bad = True
+                    print(f"[midreport] testo illeggibile ({t[:60]}...): " + "; ".join(res["da_riscrivere"]),
+                          file=sys.stderr)
+            red[key] = fixed if isinstance(values, list) else fixed[0]
+        if bad:
+            print("[midreport] HTML non scritto: riscrivere in italiano semplice e rilanciare (o --no-check)",
+                  file=sys.stderr)
+            return 2
+
     html = rep.render_html(start, end, red["sintesi"], data["sections"], data["notes"],
-                           red["chart_sentence"], red.get("contesto_note"), span=red.get("span"))
+                           red["chart_sentence"], red.get("contesto_note"), span=red.get("span"),
+                           note_dati=red.get("note_dati"), chart_src=red.get("chart_src"))
     out = args.dir / f"midreport_settimana{start.isocalendar()[1]:02d}.html"
     with open(out, "w", encoding="utf-8", newline="\n") as f:
         f.write(html)

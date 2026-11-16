@@ -1,0 +1,10 @@
+- Scrivi come parleresti a un collega che non ha visto i dati: soggetto, verbo, una sola idea per frase.
+- Prima cosa è successo, poi cosa fare. Il numero serve a sostenere l'idea, non a riempire il testo.
+- Al massimo 6 numeri per testo e 3-4 per idea. Arrotonda ("il 10%, di solito il 4%") e dai a ogni numero un solo confronto.
+- Frasi sotto le 25 parole. Se serve un elenco, spezza in più frasi invece di usare i due punti e le parentesi.
+- Una sola parentesi per testo. Mai sigle interne (H-01, P-04, R-07) nei testi per i lettori.
+- Niente gergo statistico (mediana, coorte, baseline, pattern, "z =" e simili): usa la parola semplice del glossario.
+- Dì "lettori" o "utenti", non il nome delle colonne. Titoli di film e serie tra apici singoli.
+- Distingui sempre ciò che si sa, ciò che si pensa e ciò che si propone, ma con una parola ("probabilmente", "da verificare"), non con una sigla.
+- Se un testo non passa il controllo si riscrive e si ricontrolla fino a che passa; ogni riscrittura e ogni feedback si registrano.
+- Un testo che passa il controllo può comunque essere inutile: la rilettura di una persona resta l'ultima verifica.

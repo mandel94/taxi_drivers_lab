@@ -144,7 +144,8 @@ def _esc(text) -> str:
     return _html.escape(str(text))
 
 
-def render_html(start, end, sintesi, sections, notes, chart_sentence, contesto_note=None, span=None):
+def render_html(start, end, sintesi, sections, notes, chart_sentence, contesto_note=None, span=None,
+                note_dati=None, chart_src=None):
     contesto_note = contesto_note or {}
     p = '<p style="margin:0 0 12px 0;font-family:Arial,sans-serif;font-size:14px;">'
     if span:
@@ -162,6 +163,8 @@ def render_html(start, end, sintesi, sections, notes, chart_sentence, contesto_n
     ]
     parts += [f"<li>{_esc(s)}</li>" for s in sintesi]
     parts.append("</ul>")
+    if note_dati:
+        parts.append(f"{p}<i>Nota sui dati: {_esc(note_dati)}</i></p>")
     for cat, rows in sections.items():
         parts.append(f"{p}<b>{_esc(cat)}:</b></p>")
         for r in rows:
@@ -181,6 +184,11 @@ def render_html(start, end, sintesi, sections, notes, chart_sentence, contesto_n
             parts.append(line + "</p>")
     parts += [
         f"{p}{_esc(chart_sentence)}</p>",
+    ]
+    if chart_src:
+        parts.append(f'<p style="margin:0 0 12px 0;"><img src="{_esc(chart_src)}" alt="Utenti attivi giornalieri" '
+                     'style="max-width:100%;height:auto;"></p>')
+    parts += [
         f"{p}Una buona serata,</p>",
         f"{p}Manuel De Luzi</p>",
         f"{p}--</p>",

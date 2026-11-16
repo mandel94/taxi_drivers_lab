@@ -78,6 +78,21 @@ def is_excluded_title(title) -> bool:
     return isinstance(title, str) and bool(_EXCLUDED_TITLE_RE.search(html.unescape(title)))
 
 
+def is_listing_path(path) -> bool:
+    """Pagina di elenco (categoria, archivio, home): niente id numerico iniziale e niente .html.
+    Gli articoli hanno /<id>/... oppure finiscono in .html; il fallback per slug di ga4_service
+    attribuirebbe un elenco come /serie-tv a un articolo con lo stesso slug (D-07 della KB)."""
+    clean = str(path).split("?")[0].split("#")[0].strip("/")
+    if not clean:
+        return True
+    segments = clean.split("/")
+    return not segments[0].isdigit() and not segments[-1].lower().endswith(".html")
+
+
+def drop_listing_pages(pages: pd.DataFrame) -> pd.DataFrame:
+    return pages[~pages[PAGE_PATH_COLUMN].map(is_listing_path)].reset_index(drop=True)
+
+
 def dominant_category(pages: pd.DataFrame) -> pd.DataFrame:
     """Per articolo, la categoria del percorso con piu' activeUsers."""
     ranked = pages.assign(activeUsers=pd.to_numeric(pages["activeUsers"], errors="coerce").fillna(0))
@@ -108,7 +123,7 @@ def build_top(conn, client, property_id: str, start: dt.date, end: dt.date, top:
         pages = pd.concat(parts, ignore_index=True)
     else:
         pages = fetch_week_pages(client, property_id, start, end)
-    matched = attach_article_ids(conn, pages)
+    matched = attach_article_ids(conn, drop_listing_pages(pages))
     if matched.empty:
         return pd.DataFrame(columns=HEADERS + (["article_id"] if with_article_id else []))
 
