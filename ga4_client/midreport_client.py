@@ -98,11 +98,12 @@ def article_details(conn, article_ids: list[int]) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["article_id", "title", "author", "published_at"])
 
 
-def build_top(conn, client, property_id: str, start: dt.date, end: dt.date, top: int) -> pd.DataFrame:
+def build_top(conn, client, property_id: str, start: dt.date, end: dt.date, top: int,
+              with_article_id: bool = False) -> pd.DataFrame:
     pages = fetch_week_pages(client, property_id, start, end)
     matched = attach_article_ids(conn, pages)
     if matched.empty:
-        return pd.DataFrame(columns=HEADERS)
+        return pd.DataFrame(columns=HEADERS + (["article_id"] if with_article_id else []))
 
     categories = dominant_category(matched)
     scored = score_articles(combine_pages_by_article(matched)).sort_values("editorial_rank")
@@ -124,6 +125,8 @@ def build_top(conn, client, property_id: str, start: dt.date, end: dt.date, top:
             "averageSessionDuration": merged["averageSessionDuration"].astype(float),
         }
     )
+    if with_article_id:
+        out["article_id"] = merged["article_id"].astype(int)
     return out.reset_index(drop=True)
 
 

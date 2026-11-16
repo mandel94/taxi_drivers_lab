@@ -8,6 +8,7 @@ Il 15/11/2026 il limite d'uso si è esaurito a metà di un lavoro: pacchetto `nl
 3. **Un compito per sessione.** Chiuso un compito, proponi una nuova sessione: il contesto lungo si paga a ogni turno.
 4. **Checkpoint su file.** A ogni fase aggiorna `STATO.md` nella cartella di output (fatto, da fare, comandi). Una sessione interrotta riparte da lì.
 5. **Limite vicino:** finisci il pezzo in mano, salva lo stato, dillo e fermati.
+6. **Catalogo funzionalità.** Ogni funzione nuova o modificata (skill, script, workflow, report) si registra in `docs/catalogo_funzionalita.md` prima di chiudere il lavoro: nome, cosa fa, come si lancia, dove sta, stato e limiti noti. Va nel `wrap_up`, senza aspettare che l'utente lo chieda.
 
 ## Sottoagenti
 - Massimo 2-3 per fase, mai in parallelo senza averlo detto. Non servono per leggere pochi file o per risposte brevi.
